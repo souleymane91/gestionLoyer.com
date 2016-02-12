@@ -1,0 +1,104 @@
+<?php
+
+namespace SMB\LoyerBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Codification
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Codification
+{
+    /**
+     * etudiant
+     *
+     * @ORM\ManyToOne(targetEntity="SMB\LoyerBundle\Entity\Etudiant", inversedBy="codifications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $etudiant;
+
+    /**
+     * registre
+     *
+     * @ORM\ManyToOne(targetEntity="SMB\LoyerBundle\Entity\Registre", inversedBy="codifications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $registre;
+
+    /**
+     * paiement
+     *
+     * @ORM\OneToMany(targetEntity="SMB\LoyerBundle\Entity\Paiement", mappedBy="codification")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $paiements;
+
+    /**
+     * pavion
+     *
+     * @ORM\ManyToOne(targetEntity="SMB\LoyerBundle\Entity\Pavion", inversedBy="codifications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pavion;
+
+    /**
+    * chambre
+    *
+    * @ORM\ManyToOne(targetEntity="SMB\LoyerBundle\Entity\Chambre", inversedBy="codifications")
+    * @ORM\JoinColumn(nullable=false)
+    */
+    private $chambre;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_codification", type="datetime")
+     */
+    private $dateCodification;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateCodification
+     *
+     * @param \DateTime $dateCodification
+     * @return Codification
+     */
+    public function setDateCodification($dateCodification)
+    {
+        $this->dateCodification = $dateCodification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCodification
+     *
+     * @return \DateTime 
+     */
+    public function getDateCodification()
+    {
+        return $this->dateCodification;
+    }
+}
