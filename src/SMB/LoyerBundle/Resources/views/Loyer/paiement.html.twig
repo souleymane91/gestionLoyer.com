@@ -1,0 +1,12 @@
+{# src\SMB\LoyerBundle\Resources\Views\Loyer\paiement.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Nouveau paiement - {{ parent() }}
+{% endblock %}
+
+{% block smbloyer_body %}
+	
+	{{ form(form) }}
+{% endblock %}

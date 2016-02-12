@@ -1,0 +1,4 @@
+services:
+#    smb_loyer.example:
+#        class: SMB\LoyerBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

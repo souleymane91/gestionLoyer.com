@@ -1,0 +1,162 @@
+{# SMB\UserBundle\Resources\views\User\add.html.twig #}
+
+	<div id="infoUser">
+	</div>
+
+	<div id="ajoutUser" class="block ajout_user col-sm-6">
+		<!-- {{ form_start(form, {'atr': {'class': 'ajouter_user form-horizontal'}}) }} -->
+		<form id="formulaire" type="post" action="#">
+		<h5 class="titre">Nouvel utilisateur</h5>
+			{{ form_errors(form) }}
+			<div class="row">
+				<div class="col-sm-10">
+					<h4 class="sous_titre">Informations personnelles</h4>
+					{# personalisation du champ prenom #}
+					<div class="form-group">
+						<div class="error error_prenom">
+						</div>
+						{{ form_label(form.prenom, "Prénom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.prenom, {'atr': {'class': 'form-control'}}) }}
+					</div>
+					
+					{# personalisation du champ nom #}
+					<div class="form-group">
+						<div class="error">
+							{{ form_errors(form.nom) }}
+						</div>
+						{{ form_label(form.nom, "Nom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.nom, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ username #}
+					<div class="form-group">
+						<div class="error">
+							{{ form_errors(form.username) }}
+						</di>
+						{{ form_label(form.username, "Nom d'utilisateur: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.username, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ email #}
+					<div class="form-group">
+						<div class="error">
+							{{ form_errors(form.email) }}
+						</div>
+						{{ form_label(form.email, "Adresse email: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.email, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ password #}
+					<div class="form-group">
+						<div class="error">
+							{{ form_errors(form.password) }}
+						</div>
+						{{ form_label(form.password, "Mot de passe: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.password, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ profil #}
+					<div class="form-group profil_user">
+						<div class="error">
+							{{ form_errors(form.profils) }}
+						</div>
+						<h4 class="sous_titre">Profils de l'utilisateur</h4>
+						{{ form_label(form.profils, " " , {'label_atr': {'class': 'col-sm-3 label_profil control-label'}}) }}
+						{{ form_widget(form.profils, {'atr': {'class': 'form-control'}}) }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<input id="ajout_user" type="submit" value="Ajouter" />
+			</div>
+		</form>
+		<!-- {{ form_end(form) }} -->
+	</div>
+
+
+<script type="text/javascript">
+	
+			/*********************************************************
+			* codes javascripts pour enregistrer un nouvel utilisateur
+			**********************************************************/
+
+			$('#formulaire').submit(function(){
+
+				$('#chargement').addClass('charge');
+				$('#chargement').html('opération en cours...');
+
+				var prenom = $('#smb_userbundle_user_prenom').val();
+				var nom = $('#smb_userbundle_user_nom').val();
+				var login = $('#smb_userbundle_user_username').val();
+				var email = $('#smb_userbundle_user_email').val();
+				var motdepasse = $('#smb_userbundle_user_password').val();
+				var profil = $('#smb_userbundle_user_profils').val();
+
+				var donnees=$(this).serialize();
+				var DATA = 'prenom='+prenom+'&nom='+nom+'&login='+login+'&email='+email+'&motdepasse='+motdepasse+'&profil='+profil;
+
+				var message_prenom=prenomValid(prenom);
+				var message_nom=prenomValid(nom);
+				var message_login=loginValid(login);
+				var message_email=emailValid(email);
+				var message_password=passwordValid(motdepasse);
+
+				//On teste si les données saisies sont valides
+				if(message_prenom!=null){
+					$('.error_prenom').html(message_prenom);
+				}
+				else{
+					$.ajax({
+						type: "POST",
+						url: "{{ path('smb_user_add_data') }}",
+						data: DATA,
+						success: function(data){
+							$('#ajoutUser').hide();
+							$('#infoUser').html(data);
+							
+							$('#chargement').removeClass('charge');
+							$('#chargement').empty();
+						},
+						error: function(resultat,statut,error){
+							$('#chargement').removeClass('charge');
+							$('#chargement').empty();
+						}
+					});					
+				}
+
+				return false;
+			});
+
+			//fonction qui permet de valider un prénom
+			function prenomValid(prenom){
+				var message;
+				if(prenom==null){
+					message="Le champ prénom ne peut pas être vide!";
+					return message;
+				}
+			} 
+			//fonction qui permet de valider un addresse email
+			function emailValid(email){
+				var message;
+				if(email==null){
+					message="Le champ email ne peut pas être vide!";
+					return message;
+				}
+			} 
+			//fonction qui permet de valider un nom d'utilisateur
+			function loginValid(login){
+				var message;
+				if(login==null){
+					message="Le champ login ne peut pas être vide!";
+				}
+				return message;
+			} 
+			//fonction qui permet de valider un mot de passe
+			function passwordValid(password){
+				var message;
+				if(password==null){
+					message="Le champ password ne peut pas être vide!";
+				}
+				return message;
+			} 
+</script>

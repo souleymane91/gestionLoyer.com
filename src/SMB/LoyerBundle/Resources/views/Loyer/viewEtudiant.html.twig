@@ -1,0 +1,116 @@
+{# src\SMB\LoyerBundle\Resources\Views\Loyer\view.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Informations de l'étudiant - {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}	
+	<div class="row">
+		{% if codifier==true %}
+			<div>
+				<a href="{{ path('smb_loyer_paiement',{'id':etudiant.id}) }}">Effectuer un paiement</a>
+			</div>
+			<div>
+				<a href="{{ path('smb_loyer_paiement',{'id':etudiant.id}) }}">Modifier les paiements</a>
+			</div>
+		{% endif %}
+		<div>
+			<a href="{{ path('smb_loyer_edit_etudiant',{'id':etudiant.id}) }}">Modifier les informations de l'étudiant</a>
+		</div>
+		<div >
+			<a href="{{ path('smb_loyer_home_etudiant') }}">Retour à la liste</a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block smbloyer_body %}
+		<div class="col-sm-6">
+			<div class="block info_etudiant">
+
+				<div class="w">
+					<div class="titre_block">
+						<h5 class="titre"> Informations de l'étudiant</h5>
+					</div>
+					<table>
+						<tr>
+							<td class="libelle">Prénom</td> <td>{{ etudiant.prenom }}</td>
+						</tr>
+						<tr>
+							<td class="libelle">Nom</td><td>{{ etudiant.nom }}</td>
+						</tr>
+						<tr>
+							<td class="libelle">Adresse email</td><td>{{ etudiant.email }}</td>
+						</tr>
+						<tr>
+							<td class="libelle">Téléphone</td><td>{{ etudiant.telephone }}</td>
+						</tr>
+						{% if codifier==false %}
+							<a href="{{ path('smb_loyer_codification',{'id':etudiant.id}) }}">Codifier maintenant</a>
+						{% else %}
+							<tr>
+								<td class="libelle">Chambre</td><td>{{ codification.chambre.numero }}{{ codification.pavion.libelle }}</td>
+							</tr>
+						{% endif %}
+					</table>
+					
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-1">
+		</div>
+
+		{% if codifier==true %}
+			<div class="col-sm-6">
+				<div class="block paiement_etudiant">
+
+					<div class="wel">
+						<div class="titre_block">
+							<h5 class="titre">Etat Paiement</h5>
+						</div>
+						<ul class="list-group">
+							{% if listMoisPaye is not null %}
+								<div class="row">
+									<div class="col-sm-6">
+										{% set nbre=1 %}
+										<div class="part1">
+											{% for mois in listmois %}
+												{% if nbre<=6 %}
+													{% if(mois in listMoisPaye) %}
+														<li class="list-group-item paye">{{ mois.libelle }}</li>
+													{% else %}
+														<li class="nonpaye">{{ mois.libelle }}</li>
+													{% endif %}
+												{% endif %}
+												{% set nbre=nbre+1 %}
+											{% endfor %}
+										</div>											
+
+										{% set nbre=1 %}
+										<div class="part2">
+											{% for mois in listmois %}
+												{% if nbre>6 %}
+													{% if(mois in listMoisPaye) %}
+														<li class="list-group-item paye">{{ mois.libelle }}</li>
+													{% else %}
+														<li class="nonpaye">{{ mois.libelle }}</li>
+													{% endif %}
+												{% endif %}
+												{% set nbre=nbre+1 %}
+											{% endfor %}										
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						</ul>
+						{% if listMoisPaye is null %}
+							<h3>Aucun paiement effectué</h3>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	
+{% endblock %}

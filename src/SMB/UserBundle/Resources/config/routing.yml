@@ -1,0 +1,61 @@
+smb_admin:
+    path:     /admin/
+    defaults: { _controller: SMBUserBundle:User:index}
+
+smb_user_home:
+    path:     /admin/user/
+    defaults: { _controller: SMBUserBundle:User:index}
+
+smb_user_view:
+    path: /admin/user/view/{id}/
+    defaults: { _controller: SMBUserBundle:User:view }
+    requirements:
+        id: \d+
+
+smb_user_add:
+    path: /admin/user/add/
+    defaults: { _controller: SMBUserBundle:User:add }
+
+smb_user_edit:
+    path: /admin/user/edit/{id}/
+    defaults: { _controller: SMBUserBundle:User:edit }
+
+smb_user_delete:
+    path: /admin/user/delete/{id}/
+    defaults: { _controller: SMBUserBundle:User:delete }
+
+smb_profil_home:
+    path:     /admin/profil/
+    defaults: { _controller: SMBUserBundle:Profil:index}
+
+smb_profil_view:
+    path: /admin/profil/view/{id}/
+    defaults: { _controller: SMBUserBundle:Profil:view }
+    requirements:
+        id: \d+
+
+smb_profil_add:
+    path: /admin/profil/add/
+    defaults: { _controller: SMBUserBundle:Profil:add }
+
+smb_profil_edit:
+    path: /admin/profil/edit/{id}/
+    defaults: { _controller: SMBUserBundle:Profil:edit }
+
+smb_profil_delete:
+    path: /admin/profil/delete/{id}/
+    defaults: { _controller: SMBUserBundle:Profil:delete }
+
+smb_user_add_data:
+    path: /admin/user/ajouter
+    defaults: { _controller: SMBUserBundle:User:addData}
+
+login:
+    path: /login/
+    defaults: { _controller: SMBUserBundle:User:login }
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout/

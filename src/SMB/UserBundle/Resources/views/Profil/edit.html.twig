@@ -1,0 +1,39 @@
+{# SMB\UserBundle\Resources\views\Profil\edit.html.twig #}
+
+{% extends "SMBUserBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier un profil - {{ parent() }}
+{% endblock %}
+
+{% block body_stock %}
+	<h4>Modifier le profil</h4>
+	<div class="well col-sm-6">
+		{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
+			
+			{{ form_errors(form) }}
+			<div class="row">
+				<div class="col-sm-10">
+					{# personalisation du champ libelle #}
+					<div class="form-group">
+						{{ form_errors(form.libelle) }}
+						{{ form_label(form.libelle, "Nom du profil: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.libelle, {'atr': {'class': 'form-control'}}) }}
+					</div>
+					
+					{# personalisation du champ autorisation #}
+					<div class="form-group">
+						{{ form_errors(form.autorisations) }}
+						{{ form_label(form.autorisations, "Autorisations: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_widget(form.autorisations, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				{{ form_widget(form.ajouter, {'atr': {'class': 'btn btn-default'}}) }}
+			</div>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

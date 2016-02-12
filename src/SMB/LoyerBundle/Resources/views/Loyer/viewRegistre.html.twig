@@ -1,0 +1,45 @@
+{# src\SMB\LoyerBundle\Resources\Views\Loyer\viewRegistre.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Informations du registre - {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}	
+	
+{% endblock %}
+
+{% block smbloyer_body %}
+	
+	<div class="row">
+		<div class="col-sm-10">
+			<div>
+				<div>
+					<h4> Registre {{ registre.anneeScolaire }} </h4>
+				</div>
+
+				<div class="well">				
+					<ul class="list-group">
+						<h5><li class="list-group-item">Premier mois<span class="badge">{{ registre.moisDebut }}</span></li></h5>
+						<h5><li class="list-group-item">Dernier mois<span class="badge">{{ registre.moisFin }}</span></li></h5>
+						<h5><li class="list-group-item">Mensualité<span class="badge">{{ registre.mensualite }} FCFA</span></li></h5>
+						<h5><li class="list-group-item">Caution<span class="badge">{{ registre.caution }} FCFA</span></li></h5>
+						<h5><li class="list-group-item">Date d'ouverture<span class="badge">{{ registre.dateDebut|date('Y-m-d') }}</span></li></h5>
+					</ul>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-3">
+			<a class="btn btn-default" href="{{ path('smb_loyer_home_registre') }}">Retour</a>
+		</div>
+		<div class="col-sm-3">
+			<a class="btn btn-primary" href="{{ path('smb_loyer_add_registre',{'id':registre.id}) }}">Nouveau registre</a>
+		</div>
+	</div>
+{% endblock %}

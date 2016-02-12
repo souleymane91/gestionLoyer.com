@@ -1,0 +1,64 @@
+{# src\SMB\LoyersBundle\Resources\views\Loyer\addRegistre.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Ajout d'un registre - {{ parent() }}
+{% endblock %}
+
+{% block smbloyer_body %}
+	<div class="panel-heading">
+		<h4>Créer un nouveau registre </h4>
+	</div>
+
+	<div class="well">
+		{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
+			
+			{{ form_errors(form) }}
+			<div class="row">
+				<div class="col-sm-5">
+					{# personalisation du champ anneeScolaire #}
+					<div class="form-group">
+						{{ form_label(form.anneeScolaire, "Année Scolaire: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_errors(form.anneeScolaire) }}
+						{{ form_widget(form.anneeScolaire, {'atr': {'class': 'form-control'}}) }}
+					</div>
+					
+					{# personalisation du champ moisDebut #}
+					<div class="form-group">
+						{{ form_label(form.moisDebut, "Premier mois de l'année: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_errors(form.moisDebut) }}
+						{{ form_widget(form.moisDebut, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ moisFin #}
+					<div class="form-group">
+						{{ form_label(form.moisFin, "Dernier mois de l'année: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_errors(form.moisFin) }}
+						{{ form_widget(form.moisFin, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ mensualite #}
+					<div class="form-group">
+						{{ form_label(form.mensualite, "Montant mensualité: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_errors(form.mensualite) }}
+						{{ form_widget(form.mensualite, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+					{# personalisation du champ caution #}
+					<div class="form-group">
+						{{ form_label(form.caution, "Montant de la caution: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+						{{ form_errors(form.caution) }}
+						{{ form_widget(form.caution, {'atr': {'class': 'form-control'}}) }}
+					</div>
+
+				</div>
+
+			</div>
+			<div class="row">
+				{{ form_widget(form.enregistrer, {'atr': {'class': 'btn btn-default'}}) }}
+			</div>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock%}

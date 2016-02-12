@@ -1,0 +1,21 @@
+{# SMB\UserBundle\Resources\views\layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+	Accueil - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<div id="block_user">
+		<div id="contenu1">
+			<h2>Gestion des utilisateurs</h2>
+			
+			<div id="chargement"></div>
+
+			{% block body_stock %}
+			{% endblock %}
+			
+		</div>
+	</div>
+{% endblock %}

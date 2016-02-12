@@ -1,0 +1,21 @@
+{# SMB\UserBundle\Resources\views\Profil\view.html.twig #}
+
+{% extends "SMBUserBundle::layout.html.twig" %}
+
+{% block title %}
+	Information du profil - {{ parent() }}
+{% endblock %}
+
+{% block body_stock %}
+
+	<div class="block profil">
+		<h4>Profil: {{ profil.libelle }} </h4>
+		<h4>Liste des autorisations associées:</h4>
+		<ul>
+			{% for autorisation in profil.autorisations %}
+				<li> {{ autorisation.libelle }} </li>
+			{% endfor %}
+		</ul>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{# src\SMB\LoyerBundle\Resources\views\Loyer\editEtudiant.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Modification d'un étudiant - {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}		
+{% endblock %}
+
+{% block smbloyer_body %}
+	<div class="panel-heading">
+		<h4>Modification de l'étudiant </h4>
+	</div>
+
+	<div class="well col-sm-6">
+		{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
+			
+			{{ form_errors(form) }}
+
+			{# personalisation du champ prenom #}
+			<div class="form-group">
+				{{ form_label(form.prenom, "Prénom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+				{{ form_errors(form.prenom) }}
+				{{ form_widget(form.prenom, {'atr': {'class': 'form-control'}}) }}
+			</div>
+			
+			{# personalisation du champ nom #}
+			<div class="form-group">
+				{{ form_label(form.nom, "Nom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+				{{ form_errors(form.nom) }}
+				{{ form_widget(form.nom, {'atr': {'class': 'form-control'}}) }}
+			</div>
+
+			{# personalisation du champ email #}
+			<div class="form-group">
+				{{ form_label(form.email, "Adresse email: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+				{{ form_errors(form.email) }}
+				{{ form_widget(form.email, {'atr': {'class': 'form-control'}}) }}
+			</div>
+
+			{# personalisation du champ telephone #}
+			<div class="form-group">
+				{{ form_label(form.telephone, "Téléphone: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+				{{ form_errors(form.telephone) }}
+				{{ form_widget(form.telephone, {'atr': {'class': 'form-control'}}) }}
+			</div>
+
+			{# personalisation du champ caution #}
+			<div class="form-group">
+				{{ form_label(form.caution, "Caution payée: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+				{{ form_errors(form.caution) }}
+				{{ form_widget(form.caution, {'atr': {'class': 'form-control'}}) }}
+			</div>
+			<div class="btn btn-dangr">
+				<li><a href="{{ path('smb_loyer_home_etudiant') }}">Annuler</a></li>
+			</div>
+			{{ form_widget(form.enregistrer, {'atr': {'class': 'btn btn-default'}}) }}
+
+		{{ form_end(form) }}
+	</div>
+{% endblock%}

@@ -1,0 +1,10 @@
+smb_user:
+    resource: "@SMBUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+smb_loyer:
+    resource: "@SMBLoyerBundle/Resources/config/routing.yml"
+    prefix:   /gestion-loyer
+
+chambre:
+    resource: "@SMBLoyerBundle/Controller"

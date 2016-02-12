@@ -1,0 +1,69 @@
+smb_loyer_home:
+    path:     /{page}
+    defaults: { _controller: SMBLoyerBundle:Loyer:index, page: 1 }
+    requirements:
+        page: \d*
+
+smb_loyer_home_etudiant:
+    path:     /etudiant/
+    defaults: { _controller: SMBLoyerBundle:Loyer:indexEtudiant }
+
+smb_loyer_view_etudiant:
+    path: /etudiant/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:viewEtudiant }
+    requirements:
+        id: \d+
+
+smb_loyer_add_etudiant:
+    path: /etudiant/add/
+    defaults: { _controller: SMBLoyerBundle:Loyer:addEtudiant }
+
+smb_loyer_edit_etudiant:
+    path: /etudiant/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:editEtudiant}
+    requirements:
+        id: \d+
+
+smb_loyer_delete_etudiant:
+    path: /etudiant/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:deleteEtudiant }
+
+smb_loyer_home_registre:
+    path: /registre/
+    defaults: { _controller: SMBLoyerBundle:Loyer:indexRegistre }
+
+smb_loyer_view_registre:
+    path: /registre/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:viewRegistre }
+    requirements:
+        id: \d+
+
+smb_loyer_add_registre:
+    path: /registre/add/
+    defaults: { _controller: SMBLoyerBundle:Loyer:addRegistre }
+
+smb_loyer_edit_registre:
+    path: /registre/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:editRegistre }
+    requirements:
+        id: \d+
+
+smb_loyer_codification:
+    path: /etudiant/codification/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:codification }
+    requirements:
+        id: \d+
+
+smb_loyer_paiement:
+    path: /etudiant/paiement/{id}/
+    defaults: { _controller: SMBLoyerBundle:Loyer:paiement }
+    requirements:
+        id: \d+
+
+smb_loyer_recherche:
+    path: /recherche/
+    defaults: { _controller: SMBLoyerBundle:Loyer:recherche }
+
+smb_loyer_admin:
+    path: /administraion
+    defaults: { _controller: SMBLoyerBundle:Loyer:admin }

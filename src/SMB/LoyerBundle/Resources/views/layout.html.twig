@@ -1,0 +1,27 @@
+{# src/SMB/LoyerBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+  Gestion des paiements - {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+	<div class="row col-sm-12">
+	 	
+	 	<div id="contenu">
+		 
+		  {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+		  <h2>Gestion du loyer</h2>
+		  {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+		  {% block smbloyer_body %}
+		  {% endblock %}
+		  
+
+		</div>
+	</div>
+
+{% endblock %}

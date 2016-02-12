@@ -1,0 +1,93 @@
+ {# app/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}SMB Gestion Loyer{% endblock %}</title>
+
+  {% block stylesheets %}
+     <!-- <link rel="stylesheet" href="{{asset('bundles/bootstrap/css/bootstrap.min.css') }}" type="text/css"
+media="all" /> -->
+     <link rel="stylesheet" href="{{asset('bundles/loyer/css/screen.css') }}" type="text/css"/>
+     <link rel="stylsheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css"/>
+     <!-- <link rel="stylesheet" href="{{asset('bundles/css/style.css') }}" type="text/css"> -->
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+  {% endblock %}
+ 
+</head>
+
+<body>
+  <div class="contenant" >
+    <div id="header">
+      <div class="logo"></div>
+      <div class="titre">
+        <h1>Gestion du loyer</h1>
+        <span class="deconnect pull-right"><a href="{{ path('logout') }}" title="Déconnexion"></a></span>
+      </div> 
+    </div>
+
+    <div class="row">
+      <div id="sidebare">
+        <div id="menu">
+          <nav class="">
+            <ul class="">
+              <li class="niveau1">
+                <span class="titre"><a class="icon-homes" href="{{ path('smb_loyer_home') }}">Accueil</a></span>
+              </li>
+              <li class="niveau1">
+                <span class="titre menu_gestion"><a href="{{ path('smb_loyer_home_etudiant') }}">Gestion</a></span>
+                <ul>
+                  <li class="niveau2 menu_etudiant"><a href="{{ path('smb_loyer_home_etudiant') }}">Etudiants</a></li>
+                  <li class="niveau2 menu_paiement"><a href="{{ path('smb_loyer_home') }}">Paiements</a></li>
+                </ul>
+              </li>
+              {% if(is_granted('ROLE_ADMIN')) %}
+                <li class="niveau1">
+                  <span class="titre menu_admin"><a href="#">Administration</a></span>
+                  <ul>
+                    <li class="niveau2"><a href="{{ path('smb_user_home') }}">Gestion utilisateurs</a></li>
+                    <li class="niveau2"><a href="{{ path('smb_profil_home') }}">Gestion profils</a></li>
+                    <li class="niveau2">
+                      <span><a href="#">Paramètres</a></span>
+                      <!-- <ul>
+                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des registres</a></li>
+                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des chambres</a></li>
+                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des pavion</a></li>
+                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des mois</a></li>
+                      </ul> -->
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <div id="content">
+        {% block scripts %}
+          <script src="{{ asset('bundles/js/jquery-2.1.1.min.js') }}"></script>
+          <!-- <script src="{{ asset('bundles/js/script.js') }}"></script>
+          <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script> -->
+        {% endblock %}
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+
+    <hr>
+
+    <footer>
+      <p>MBAYE Souleymane © {{ 'now'|date('Y') }}.</p>
+      
+    </footer>
+  </div>
+
+        {% block javascript %}
+        {% endblock %}
+
+</body>
+</html>

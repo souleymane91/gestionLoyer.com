@@ -1,0 +1,25 @@
+{# src/SMB/UserBundle/Resources/views/layout_admin.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+  Gestion des paiements - {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+	<div class="row col-sm-12">
+	 	
+	 	<div id="contenu">
+		 
+		  {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+		  {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+		  {% block smbloyer_body %}
+		  {% endblock %}
+
+		</div>
+	</div>
+
+{% endblock %}
