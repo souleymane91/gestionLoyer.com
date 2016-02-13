@@ -1,5 +1,6 @@
 {
     "name": "user/projet",
+    "description":"Le fichier qui contient les dépendances",
     "license": "proprietary",
     "type": "project",
     "autoload": {
