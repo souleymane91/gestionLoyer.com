@@ -20,7 +20,6 @@ class EtudiantTest extends \PHPUnit_Framework_TestCase
         $etudiant->setCaution(1);
         
         $this->assertEquals('Souleymane',$etudiant->getPrenom());
-        $this->assertTrue($etudiant->setPrenom('125555'));
         
     } 
 }
