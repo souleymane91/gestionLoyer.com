@@ -28,7 +28,8 @@
         "twitter/bootstrap-bundle": "^2.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "5.4.x-dev"
     },
     "scripts": {
         "post-root-package-install": [
