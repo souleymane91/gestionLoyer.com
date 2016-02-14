@@ -29,7 +29,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit": "5.4.x-dev"
+        "phpunit/phpunit": "5.4.x-dev",
+        "phpunit/phpunit-skeleton-generator": "dev-master"
     },
     "scripts": {
         "post-root-package-install": [
