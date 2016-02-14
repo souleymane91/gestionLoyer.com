@@ -79,13 +79,16 @@ class Etudiant
      * Set prenom
      *
      * @param string $prenom
-     * @return Etudiant
+     * @return boolean
      */
     public function setPrenom($prenom)
     {
-        $this->prenom = $prenom;
+        if($prenom !="125555"){
+            $this->prenom = $prenom;
+            return true;
+        }
 
-        return $this;
+        return false;
     }
 
     /**
