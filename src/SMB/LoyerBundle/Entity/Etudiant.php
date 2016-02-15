@@ -3,6 +3,7 @@
 namespace SMB\LoyerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Etudiant
@@ -33,6 +34,18 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre prénom.")
+     * @Assert\Length(
+     *      min=2, 
+     *      max=30, 
+     *      minMessage="Le prénom doit comporter plus de {{ limit }} caractères"),
+     *      maxMessage="Le prénom ne doit pas comporter plus de {{ limit }} caractères"
+     *  )
+     * @Assert\Regex(
+     *      pattern="/\d/",
+     *      match=false,
+     *      message="Le prénom ne peut pas contenir des chiffres"
+     * )
      */
     private $prenom;
 
@@ -40,6 +53,18 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre nom.")
+     * @Assert\Length(
+     *      min=2, 
+     *      max=30, 
+     *      minMessage="Le nom doit comporter plus de {{ limit }} caractères"),
+     *      maxMessage="Le nom ne doit pas comporter plus de {{ limit }} caractères"
+     *  )
+     * @Assert\Regex(
+     *      pattern="/\d/",
+     *      match=false,
+     *      message="Le nom ne peut pas contenir des chiffres"
+     * )
      */
     private $nom;
 
@@ -47,6 +72,8 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir une adresse mail.")
+     * @Assert\Email(message="Cet adresse email n'est pas valide.")
      */
     private $email;
 
@@ -54,6 +81,11 @@ class Etudiant
      * @var integer
      *
      * @ORM\Column(name="telephone", type="integer")
+     * @Assert\Regex(
+     *      pattern = "/^\d{9}$/",
+     *      match = true,
+     *      message = "Le numéro saisi n'est pas valide."
+     * )
      */
     private $telephone;
 
@@ -83,12 +115,8 @@ class Etudiant
      */
     public function setPrenom($prenom)
     {
-        if($prenom !="125555"){
-            $this->prenom = $prenom;
-            return true;
-        }
-
-        return false;
+        $this->prenom = $prenom;
+            
     }
 
     /**
