@@ -3,6 +3,7 @@
 namespace SMB\LoyerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Etudiant
@@ -33,6 +34,18 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre prénom.")
+     * @Assert\Length(
+     *      min=2, 
+     *      max=30, 
+     *      minMessage="Le prénom doit comporter plus de {{ limit }} caractères"),
+     *      maxMessage="Le prénom ne doit pas comporter plus de {{ limit }} caractères"
+     *  )
+     * @Assert\Regex(
+     *      pattern="/^[^0-9]{2}/",
+     *      match=true,
+     *      message="Veuillez saisir un prénom valide"
+     * )
      */
     private $prenom;
 
@@ -40,6 +53,18 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre nom.")
+     * @Assert\Length(
+     *      min=2, 
+     *      max=30, 
+     *      minMessage="Le nom doit comporter plus de {{ limit }} caractères"),
+     *      maxMessage="Le nom ne doit pas comporter plus de {{ limit }} caractères"
+     *  )
+     * @Assert\Regex(
+     *      pattern="/^[^0-9]{2}[\w\W]{1,}$/",
+     *      match=true,
+     *      message="Veuillez saisir un nom valide"
+     * )
      */
     private $nom;
 
@@ -47,13 +72,20 @@ class Etudiant
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir une adresse mail.")
+     * @Assert\Email(message="Cet adresse email n'est pas valide.")
      */
     private $email;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="telephone", type="integer")
+     * @ORM\Column(name="telephone", type="string")
+     * @Assert\Regex(
+     *      pattern = "/^77|70|78|76 ?[0-9]{3} ?[0-9]{2} ?[0-9]{2}$/",
+     *      match = true,
+     *      message = "Le numéro saisi n'est pas valide."
+     * )
      */
     private $telephone;
 
@@ -79,13 +111,12 @@ class Etudiant
      * Set prenom
      *
      * @param string $prenom
-     * @return Etudiant
+     * @return boolean
      */
     public function setPrenom($prenom)
     {
         $this->prenom = $prenom;
-
-        return $this;
+            
     }
 
     /**
@@ -145,29 +176,6 @@ class Etudiant
     }
 
     /**
-     * Set telephone
-     *
-     * @param integer $telephone
-     * @return Etudiant
-     */
-    public function setTelephone($telephone)
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    /**
-     * Get telephone
-     *
-     * @return integer 
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
      * Set caution
      *
      * @param boolean $caution
@@ -190,4 +198,44 @@ class Etudiant
         return $this->caution;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->codifications = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add codifications
+     *
+     * @param \SMB\LoyerBundle\Entity\Codification $codifications
+     * @return Etudiant
+     */
+    public function addCodification(\SMB\LoyerBundle\Entity\Codification $codifications)
+    {
+        $this->codifications[] = $codifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove codifications
+     *
+     * @param \SMB\LoyerBundle\Entity\Codification $codifications
+     */
+    public function removeCodification(\SMB\LoyerBundle\Entity\Codification $codifications)
+    {
+        $this->codifications->removeElement($codifications);
+    }
+
+    /**
+     * Get codifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCodifications()
+    {
+        return $this->codifications;
+    }
 }

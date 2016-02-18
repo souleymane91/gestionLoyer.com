@@ -42,9 +42,9 @@ class Etudiant
      *      maxMessage="Le prénom ne doit pas comporter plus de {{ limit }} caractères"
      *  )
      * @Assert\Regex(
-     *      pattern="/\d/",
-     *      match=false,
-     *      message="Le prénom ne peut pas contenir des chiffres"
+     *      pattern="/^[^0-9]{2}/",
+     *      match=true,
+     *      message="Veuillez saisir un prénom valide"
      * )
      */
     private $prenom;
@@ -61,9 +61,9 @@ class Etudiant
      *      maxMessage="Le nom ne doit pas comporter plus de {{ limit }} caractères"
      *  )
      * @Assert\Regex(
-     *      pattern="/\d/",
-     *      match=false,
-     *      message="Le nom ne peut pas contenir des chiffres"
+     *      pattern="/^[^0-9]{2}[\w\W]{1,}$/",
+     *      match=true,
+     *      message="Veuillez saisir un nom valide"
      * )
      */
     private $nom;
@@ -78,11 +78,11 @@ class Etudiant
     private $email;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="telephone", type="integer")
+     * @ORM\Column(name="telephone", type="string")
      * @Assert\Regex(
-     *      pattern = "/^\d{9}$/",
+     *      pattern = "/^77|70|78|76[0-9]{3}[0-9]{2}[0-9]{2}$/",
      *      match = true,
      *      message = "Le numéro saisi n'est pas valide."
      * )
@@ -176,29 +176,6 @@ class Etudiant
     }
 
     /**
-     * Set telephone
-     *
-     * @param integer $telephone
-     * @return Etudiant
-     */
-    public function setTelephone($telephone)
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    /**
-     * Get telephone
-     *
-     * @return integer 
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
      * Set caution
      *
      * @param boolean $caution
@@ -260,5 +237,28 @@ class Etudiant
     public function getCodifications()
     {
         return $this->codifications;
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     * @return Etudiant
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string 
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
     }
 }

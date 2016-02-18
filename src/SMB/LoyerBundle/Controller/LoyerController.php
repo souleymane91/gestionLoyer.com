@@ -183,18 +183,8 @@ class LoyerController extends Controller{
 
                             return $this->redirect($this->generateUrl("smb_loyer_view_etudiant",array('id'=>$etudiant->getId())));
                     }   
-                    
                 }
                 
-		//on enregistre les données tapées par le visiteur en testant si elles sont valides
-		if($form->isValid()){
-			$em=$this->getDoctrine()->getManager();
-			$em->persist($etudiant);
-			$em->flush();
-
-			return $this->redirect($this->generateUrl("smb_loyer_view_etudiant",array('id'=>$etudiant->getId())));
-		}
-
 		return $this->render("SMBLoyerBundle:Loyer:addEtudiant.html.twig",
 			array('form' => $form->createView()
 		));
