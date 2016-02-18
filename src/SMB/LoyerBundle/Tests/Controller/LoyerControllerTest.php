@@ -17,7 +17,9 @@ class LoyerControllerTest extends WebTestCase{
         
         $this->assertGreaterThan(0, $crawler->filter('html:contains("submit")')->count());
         
-        print_r($crawler);
+        $bouton = $crawler->selectButton('submit');
+        
+        print_r($bouton);
         /*
         
         $bouton = $crawler->selectButton('smb_loyerbundle_etudiant_enregistrer');
