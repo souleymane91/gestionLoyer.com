@@ -26,9 +26,7 @@ class LoyerController extends Controller{
 	/***********************************************************
 	 * l'action index qui est l'accueil de l'application
 	 *********************************************************/
-	/**
-	* @Security("has_role('ROLE_GESTIONNAIRE') or has_role('ROLE_USER')")
-	*/
+	
 	public function indexAction($page, Request $request){
 
 		if($page<1){
