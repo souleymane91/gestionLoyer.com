@@ -12,7 +12,7 @@
 			<div class="titre_block">
 		  		<h5 class="titre">Liste des étudiants 
 		  			<span class="pull-right">
-		  				<a style="color:white;text-decoration:none" href="{{ path('smb_loyer_add_etudiant') }}">Inscription</a>
+		  				<a style="color:white;text-decoration:none" href="{{ path('smb_etudiant_add') }}">Inscription</a>
 		  			</span>
 		  		</h5>
 			</div>
@@ -50,15 +50,15 @@
 		   				<td>{{ etudiant.telephone }}</td>
 		   				<td>codifié</td>
 		   				<td>
-		   					<a class="afficher" href="{{ path('smb_loyer_view_etudiant',{'id':etudiant.id}) }}">
+		   					<a class="afficher" href="{{ path('smb_etudiant_view',{'id':etudiant.id}) }}">
 		   					</a>
 		   				</td>
 		   				<td>
-		   					<a class="modifier" href="{{ path('smb_loyer_edit_etudiant',{'id':etudiant.id}) }}">
+		   					<a class="modifier" href="{{ path('smb_etudiant_edit',{'id':etudiant.id}) }}">
 		   					</a>
 		   				</td>
 		   				<td>
-		   					<a class="supprimer" href="{{ path('smb_loyer_delete_etudiant',{'id':etudiant.id}) }}">
+		   					<a class="supprimer" href="{{ path('smb_etudiant_delete',{'id':etudiant.id}) }}">
 		   					</a>
 		   				</td>
 		   			</tr>

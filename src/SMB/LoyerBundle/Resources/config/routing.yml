@@ -4,29 +4,30 @@ smb_loyer_home:
     requirements:
         page: \d*
 
-smb_loyer_home_etudiant:
+smb_etudiant_home:
     path:     /etudiant/
-    defaults: { _controller: SMBLoyerBundle:Loyer:indexEtudiant }
+    defaults: { _controller: SMBLoyerBundle:Etudiant:index }
 
-smb_loyer_view_etudiant:
+smb_etudiant_view:
     path: /etudiant/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:viewEtudiant }
+    defaults: { _controller: SMBLoyerBundle:Etudiant:view }
     requirements:
         id: \d+
 
-smb_loyer_add_etudiant:
+smb_etudiant_add:
     path: /etudiant/add/
-    defaults: { _controller: SMBLoyerBundle:Loyer:addEtudiant }
+    defaults: { _controller: SMBLoyerBundle:Etudiant:add }
 
-smb_loyer_edit_etudiant:
+smb_etudiant_edit:
     path: /etudiant/edit/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:editEtudiant}
+    defaults: { _controller: SMBLoyerBundle:Etudiant:edit}
     requirements:
         id: \d+
 
-smb_loyer_delete_etudiant:
+smb_etudiant_delete:
     path: /etudiant/delete/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:deleteEtudiant }
+    defaults: { _controller: SMBLoyerBundle:Etudiant:delete }
+
 
 smb_loyer_home_registre:
     path: /registre/

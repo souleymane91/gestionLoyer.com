@@ -204,6 +204,7 @@ class Etudiant
     public function __construct()
     {
         $this->codifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->caution = TRUE;
     }
 
     /**

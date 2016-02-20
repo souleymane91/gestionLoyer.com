@@ -135,8 +135,6 @@ class User implements UserInterface{
 
 
     public function __construct(){
-        //role par defaut est ROLE_USER
-        $this->roles=array("ROLE_USER");
         $this->salt=base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
     }
 
@@ -307,7 +305,11 @@ class User implements UserInterface{
     public function addProfil(\SMB\UserBundle\Entity\Profil $profils)
     {
         $this->profils[] = $profils;
-
+        //on met le role sous son format
+        $role = "ROLE_".$profils->getLibelle();
+        //on ajoute le profil comme role
+        $this->setRoles(array($role));
+        //on lie le profil à l'utilisateur
         $profils->addUtilisateur($this);
 
         return $this;
