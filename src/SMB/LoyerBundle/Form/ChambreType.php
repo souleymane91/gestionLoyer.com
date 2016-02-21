@@ -16,6 +16,7 @@ class ChambreType extends AbstractType
     {
         $builder
             ->add('numero')
+            ->add('enregistrer', 'submit')
         ;
     }
     

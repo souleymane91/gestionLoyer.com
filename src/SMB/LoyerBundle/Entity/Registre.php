@@ -288,6 +288,8 @@ class Registre
         $this->codifications = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->dateDebut=new \DateTime();
+        
+        $this->supprime = false;
     }
 
     /**

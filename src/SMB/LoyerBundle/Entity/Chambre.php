@@ -105,6 +105,7 @@ class Chambre
     public function __construct()
     {
         $this->codifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supprime = false;
     }
 
     /**

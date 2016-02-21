@@ -6,10 +6,8 @@ smb_mois_home:
     defaults: { _controller: SMBLoyerBundle:Mois:index }
 
 smb_mois_add:
-    path: /mois/add/{id}/
+    path: /mois/add/
     defaults: { _controller: SMBLoyerBundle:Mois:add }
-    requirements:
-        id: \d+
         
 smb_mois_edit:
     path: /mois/edit/{id}/

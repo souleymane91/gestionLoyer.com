@@ -51,7 +51,7 @@ class PavionController extends Controller{
                     $em->flush();
                     
                     //on redirige vers la page d'affichage du pavion
-                    return $this->redirect($this->generateUrl('smb_pavion_view',array(
+                    return $this->redirect($this->generateUrl('smb_loyer_parametre',array(
                                                                                     'id' => $pavion->getId()
                                                                                     )
                     ));
@@ -59,7 +59,9 @@ class PavionController extends Controller{
                 //les données saisies ne sont pas valides
             }
             //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Pavion:add.html.twig");
+            return $this->render("SMBLoyerBundle:Pavion:add.html.twig",array(
+                'form' => $form->createView()
+            ));
 	}
         
 	/**********************************************************************

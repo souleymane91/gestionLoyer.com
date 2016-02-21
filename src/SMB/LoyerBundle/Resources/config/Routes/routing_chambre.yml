@@ -6,10 +6,8 @@ smb_chambre_home:
     defaults: { _controller: SMBLoyerBundle:Chambre:index }
 
 smb_chambre_add:
-    path: /chambre/add/{id}/
+    path: /chambre/add/
     defaults: { _controller: SMBLoyerBundle:Chambre:add }
-    requirements:
-        id: \d+
         
 smb_chambre_edit:
     path: /chambre/edit/{id}/

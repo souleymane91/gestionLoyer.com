@@ -105,6 +105,7 @@ class Mois
     public function __construct()
     {
         $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supprime = false;
     }
 
     /**

@@ -6,10 +6,8 @@ smb_registre_home:
     defaults: { _controller: SMBLoyerBundle:Registre:index }
 
 smb_registre_add:
-    path: /registre/add/{id}/
+    path: /registre/add/
     defaults: { _controller: SMBLoyerBundle:Registre:add }
-    requirements:
-        id: \d+
         
 smb_registre_edit:
     path: /registre/edit/{id}/

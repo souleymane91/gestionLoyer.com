@@ -7,22 +7,75 @@
 {% endblock %}
 
 {% block smbloyer_body %}
-    <div class="menu_parametre">
-        <ul>
-            <li><a href="#">Pavions</a></li>
-            <li><a href="#">Chambres</a></li>
-            <li><a href="#">Mois</a></li>
-        </ul>
+    <div id="parametre">
+        <div class="menu_parametre">
+            <ul>
+                <li id="pavion" class="menu menu_pavion active"><a href="#">Pavions</a></li>
+                <li id="chambre" class="menu menu_chambre"><a href="#">Chambres</a></li>
+                <li id="mois" class="menu menu_mois"><a href="#">Mois</a></li>
+                <li id="restauration" class="menu menu_restauration"><a href="#">Restaurer</a></li>
+            </ul>
+        </div>
+        <div class="liste pavion">
+            <div class="pavion_affichage">
+                {{ render(controller('SMBLoyerBundle:Pavion:index'))}}
+            </div>
+            <div class="pavion_ajout" style="display: none">
+                {{ render(controller('SMBLoyerBundle:Pavion:add')) }}
+            </div>
+            <div class="pavion_modification">
+{#                {{ render(controller('SMBLoyerBundle:Pavion:edit')) }}#}
+            </div>
+        </div>
+
+        <div class="liste chambre" style="display:none">
+            <div class="chambre_affichage">
+                {{ render(controller('SMBLoyerBundle:Chambre:index')) }}
+            </div>
+            <div class="chambre_ajout">
+{#                {{ render(controller('SMBLoyerBundle:Chambre:add')) }}#}
+            </div>
+            <div class="chambre_modification">
+{#                {{ render(controller('SMBLoyerBundle:Chambre:edit')) }}#}
+            </div>
+        </div>
+
+        <div class="liste mois" style="display:none">
+            <div class="mois_affichage">
+                {{ render(controller('SMBLoyerBundle:Mois:index')) }}
+            </div>
+            <div class="mois_ajout">
+{#                {{ render(controller('SMBLoyerBundle:Mois:add')) }}#}
+            </div>
+            <div class="mois_modification">
+{#                {{ render(controller('SMBLoyerBundle:Mois:edit')) }}#}
+            </div>
+        </div>
     </div>
-    <div class="liste pavion">
-        {{ render(controller('SMBLoyerBundle:Pavion:index'))}}
-    </div>
+        
+    {# **************************************************
+     * l'ensemble du code jquery se trouve ici
+     *****************************************************#}
+    <script type="text/javascript">
+            $(document).ready(function(){
+                $('.menu').click(function(){
+                    $('.menu').removeClass('active');
+                    $(this).addClass('active');
+                    var ident = $(this).attr('id');
+                    
+                    $('.liste').hide();
+                    $('.'+ident).show(15);
+                });
+                
+                $('.ajout_pavion').click(function(){
+                    $('.pavion_ajout').show();
+                });
+                $('.annuler_ajout_pavion').click(function(){
+                   $('.pavion_ajout').hide(); 
+                });
+            });
+    </script>
     
-    <div class="liste chambre">
-        {{ render(controller('SMBLoyerBundle:Chambre:index')) }}
-    </div>
-    
-    <div class="liste mois">
-        {{ render(controller('SMBLoyerBundle:Mois:index')) }}
-    </div>
 {% endblock %}
+
+
