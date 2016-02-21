@@ -1,0 +1,17 @@
+smb_loyer_home:
+    path:     /{page}
+    defaults: { _controller: SMBLoyerBundle:Loyer:index, page: 1 }
+    requirements:
+        page: \d*
+        
+smb_loyer_recherche:
+    path: /recherche/
+    defaults: { _controller: SMBLoyerBundle:Loyer:recherche }
+
+smb_loyer_admin:
+    path: /administraion
+    defaults: { _controller: SMBLoyerBundle:Loyer:admin }
+    
+smb_loyer_parametre:
+    path: /parametre
+    defaults: { _controller: SMBLoyerBundle:Loyer:parametre }

@@ -14,7 +14,22 @@ class UserRepository extends EntityRepository
 {
 	public function supprimer_utilisateur($id){
 
-		$query=$this->_em->createQuery('DELETE FROM SMB\UserBundle\Entity\User u WHERE u.id='.$id);
+		$query=$this->_em->createQuery('UPDATE SMB\UserBundle\Entity\User u SET u.supprime=true WHERE u.id='.$id);
 		$result=$query->getResult();
 	}	
+        
+        /*****************************************************************
+         * Recupérer l'ensemble des utilisateur qui ne sont pas supprimés
+         *****************************************************************/
+        public function listUtilisateurs(){
+            //On recupère l'ensemble des utilisateurs sauf ceux qui ont un profil ADMIN
+            $qb=$this->createQuerybuilder('c')
+                     ->where('c.supprime = :bol')
+                     ->setParameter('bol', FALSE);
+            $qb->join('c.profils','p')
+               ->addSelect('p')
+               ->andWhere('p.libelle != :lib')
+               ->setParameter('lib', "ADMIN");
+            return $qb->getQuery()->getResult();
+        }
 }

@@ -74,10 +74,16 @@ class Registre
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_fin", type="datetime")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\Column(name="date_fin", type="datetime",nullable=true)
      */
     private $dateFin;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
 
     /**
@@ -250,6 +256,30 @@ class Registre
     {
         return $this->dateFin;
     }
+    
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return Registre
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
+
+    /**
+     * Get supprime
+     *
+     * @return boolean 
+     */
+    public function getSupprime()
+    {
+        return $this->supprime;
+    }
+    
     /**
      * Constructor
      */
@@ -291,5 +321,18 @@ class Registre
     public function getCodifications()
     {
         return $this->codifications;
+    }
+    
+    /******************************************************
+     * fonction qui recupère la liste de tous les registres
+     ******************************************************/
+    public static function listRegistres(\SMB\LoyerBundle\Controller\RegistreController $cont){
+        //on recupère la liste de tous les registres
+        //qui n'ont pas été supprimés
+        $listRegistres=$cont->getDoctrine()
+                            ->getManager()
+                            ->getRepository("SMBLoyerBundle:Registre")
+                            ->listRegistres();
+        return $listRegistres;
     }
 }

@@ -36,6 +36,12 @@ class Pavion
      */
     private $libelle;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
     /**
      * Get id
@@ -70,6 +76,29 @@ class Pavion
         return $this->libelle;
     }
 
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return Pavion
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
+
+    /**
+     * Get supprime
+     *
+     * @return boolean 
+     */
+    public function getSupprime()
+    {
+        return $this->supprime;
+    }
+    
     /**
      * Constructor
      */
@@ -109,5 +138,18 @@ class Pavion
     public function getCodifications()
     {
         return $this->codifications;
+    }
+    
+    /******************************************************
+     * fonction qui recupère la liste de tous les pavions
+     ******************************************************/
+    public static function listPavions(\SMB\LoyerBundle\Controller\PavionController $cont){
+        //on recupère la liste de tous les pavions
+        //qui n'ont pas été supprimés
+        $listPavions=$cont->getDoctrine()
+                            ->getManager()
+                            ->getRepository("SMBLoyerBundle:Pavion")
+                            ->listPavions();
+        return $listPavions;
     }
 }

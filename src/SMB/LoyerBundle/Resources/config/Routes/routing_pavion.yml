@@ -1,0 +1,24 @@
+#****************************************
+#Définition des routes pour Pavion
+#****************************************
+smb_pavion_home:
+    path: /pavion/index/
+    defaults: { _controller: SMBLoyerBundle:Pavion:index }
+
+smb_pavion_add:
+    path: /pavion/add/{id}/
+    defaults: { _controller: SMBLoyerBundle:Pavion:add }
+    requirements:
+        id: \d+
+        
+smb_pavion_edit:
+    path: /pavion/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Pavion:edit }
+    requirements:
+        id: \d+
+ 
+smb_pavion_delete:
+    path: /pavion/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Pavion:delete }
+    requirements:
+        id: \d+

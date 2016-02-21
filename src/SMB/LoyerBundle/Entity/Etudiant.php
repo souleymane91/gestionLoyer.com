@@ -95,6 +95,13 @@ class Etudiant
      * @ORM\Column(name="caution", type="boolean")
      */
     private $caution;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
 
     /**
@@ -197,6 +204,29 @@ class Etudiant
     {
         return $this->caution;
     }
+    
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return Etudiant
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
+
+    /**
+     * Get supprime
+     *
+     * @return boolean 
+     */
+    public function getSupprime()
+    {
+        return $this->supprime;
+    }
 
     /**
      * Constructor
@@ -261,5 +291,18 @@ class Etudiant
     public function getTelephone()
     {
         return $this->telephone;
+    }
+    
+    /******************************************************
+     * fonction qui recupère la liste de tous les étudiants
+     ******************************************************/
+    public static function listEtudiants(\SMB\LoyerBundle\Controller\EtudiantController $cont){
+        //on recupère la liste de tous les étudiants
+        //qui n'ont pas été supprimés
+        $listEtudiants=$cont->getDoctrine()
+                            ->getManager()
+                            ->getRepository("SMBLoyerBundle:Etudiant")
+                            ->listEtudiants();
+        return $listEtudiants;
     }
 }

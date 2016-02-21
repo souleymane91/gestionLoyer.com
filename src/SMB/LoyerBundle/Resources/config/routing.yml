@@ -1,70 +1,17 @@
-smb_loyer_home:
-    path:     /{page}
-    defaults: { _controller: SMBLoyerBundle:Loyer:index, page: 1 }
-    requirements:
-        page: \d*
+etudiant:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_etudiant.yml"
 
-smb_etudiant_home:
-    path:     /etudiant/
-    defaults: { _controller: SMBLoyerBundle:Etudiant:index }
+chambre:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_chambre.yml"
+    
+pavion:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_pavion.yml"
+ 
+registre:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_registre.yml"  
+    
+mois:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_mois.yml"
 
-smb_etudiant_view:
-    path: /etudiant/{id}/
-    defaults: { _controller: SMBLoyerBundle:Etudiant:view }
-    requirements:
-        id: \d+
-
-smb_etudiant_add:
-    path: /etudiant/add/
-    defaults: { _controller: SMBLoyerBundle:Etudiant:add }
-
-smb_etudiant_edit:
-    path: /etudiant/edit/{id}/
-    defaults: { _controller: SMBLoyerBundle:Etudiant:edit}
-    requirements:
-        id: \d+
-
-smb_etudiant_delete:
-    path: /etudiant/delete/{id}/
-    defaults: { _controller: SMBLoyerBundle:Etudiant:delete }
-
-
-smb_loyer_home_registre:
-    path: /registre/
-    defaults: { _controller: SMBLoyerBundle:Loyer:indexRegistre }
-
-smb_loyer_view_registre:
-    path: /registre/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:viewRegistre }
-    requirements:
-        id: \d+
-
-smb_loyer_add_registre:
-    path: /registre/add/
-    defaults: { _controller: SMBLoyerBundle:Loyer:addRegistre }
-
-smb_loyer_edit_registre:
-    path: /registre/edit/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:editRegistre }
-    requirements:
-        id: \d+
-
-smb_loyer_codification:
-    path: /etudiant/codification/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:codification }
-    requirements:
-        id: \d+
-
-smb_loyer_paiement:
-    path: /etudiant/paiement/{id}/
-    defaults: { _controller: SMBLoyerBundle:Loyer:paiement }
-    requirements:
-        id: \d+
-
-smb_loyer_recherche:
-    path: /recherche/
-    defaults: { _controller: SMBLoyerBundle:Loyer:recherche }
-
-smb_loyer_admin:
-    path: /administraion
-    defaults: { _controller: SMBLoyerBundle:Loyer:admin }
+loyer:
+    resource: "@SMBLoyerBundle/Resources/config/Routes/routing_loyer.yml"

@@ -36,6 +36,12 @@ class Chambre
      */
     private $numero;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
     /**
      * Get id
@@ -69,6 +75,30 @@ class Chambre
     {
         return $this->numero;
     }
+    
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return Chambre
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
+
+    /**
+     * Get supprime
+     *
+     * @return boolean 
+     */
+    public function getSupprime()
+    {
+        return $this->supprime;
+    }
+    
     /**
      * Constructor
      */
@@ -108,5 +138,18 @@ class Chambre
     public function getCodifications()
     {
         return $this->codifications;
+    }
+    
+    /******************************************************
+     * fonction qui recupère la liste de toutes les chambres
+     ******************************************************/
+    public static function listChambres(\SMB\LoyerBundle\Controller\ChambreController $cont){
+        //on recupère la liste de toutes les chambres
+        //qui n'ont pas été supprimés
+        $listChambres=$cont->getDoctrine()
+                            ->getManager()
+                            ->getRepository("SMBLoyerBundle:Chambre")
+                            ->listChambres();
+        return $listChambres;
     }
 }

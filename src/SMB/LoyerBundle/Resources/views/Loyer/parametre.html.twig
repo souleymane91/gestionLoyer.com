@@ -1,0 +1,28 @@
+{# src\SMB\LoyerBundle\Resources\views\Loyer\parametre.html.twig #}
+
+{% extends "SMBLoyerBundle::layout.html.twig" %}
+
+{% block title %}
+	Paramètrage - {{ parent() }}
+{% endblock %}
+
+{% block smbloyer_body %}
+    <div class="menu_parametre">
+        <ul>
+            <li><a href="#">Pavions</a></li>
+            <li><a href="#">Chambres</a></li>
+            <li><a href="#">Mois</a></li>
+        </ul>
+    </div>
+    <div class="liste pavion">
+        {{ render(controller('SMBLoyerBundle:Pavion:index'))}}
+    </div>
+    
+    <div class="liste chambre">
+        {{ render(controller('SMBLoyerBundle:Chambre:index')) }}
+    </div>
+    
+    <div class="liste mois">
+        {{ render(controller('SMBLoyerBundle:Mois:index')) }}
+    </div>
+{% endblock %}

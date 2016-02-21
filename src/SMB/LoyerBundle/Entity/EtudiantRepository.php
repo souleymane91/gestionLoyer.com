@@ -12,4 +12,46 @@ use Doctrine\ORM\EntityRepository;
  */
 class EtudiantRepository extends EntityRepository
 {
+    /****************************************************************
+     * fonction qui supprime permet de supprimer un étudiant
+     * Renvoie la liste des étudiant non supprimés
+     ****************************************************************/
+    public function supprimer_etudiant($id){
+        $qb = $this->createQueryBuilder('e')
+                   ->update()
+                   ->set('e.supprime', TRUE)
+                   ->where('e.id = :id')
+                   ->setParameter('id',$id);
+        return $qb->getQuery()->getResult();
+    }
+    
+    /***************************************************************
+     * fonction qui vérifie si un étudiant est supprimé ou pas
+     * Renvoie true si l'étudiant est supprimé et false sinon
+     **************************************************************/
+    public function estSupprime($id){
+        $qb = $this->createQueryBuilder('e')
+                   ->where('e.id = :id')
+                   ->setParameter('id',$id)
+                   ->andWhere('e.supprime = :bol')
+                   ->setParameter('bol', TRUE)
+                   ->getQuery();
+        $result = $qb->getOneOrNullResult();
+        if(!$result){
+            return FALSE;
+        }
+        else{
+            return TRUE;
+        }
+    }
+    /*****************************************************************
+    * Recupérer l'ensemble des utilisateur qui ne sont pas supprimés
+    *****************************************************************/
+    public function listEtudiants(){
+       //On recupère l'ensemble des étudiants
+       $qb=$this->createQuerybuilder('e')
+                ->where('e.supprime = :bol')
+                ->setParameter('bol', FALSE);
+       return $qb->getQuery()->getResult();
+    }
 }

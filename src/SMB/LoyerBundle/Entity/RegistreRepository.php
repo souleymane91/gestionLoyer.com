@@ -12,13 +12,59 @@ use Doctrine\ORM\EntityRepository;
  */
 class RegistreRepository extends EntityRepository
 {
-	public function dernier_registre(){
+    /********************************************************
+     * Fonction qui permet de  recupérer le dernier registre
+     ********************************************************/
+    public function dernier_registre(){
 
-		$qb=$this->createQueryBuilder('r');
-		$qb->orderBy('r.id', 'DESC')
-		->setMaxResults(1);
+        $qb=$this->createQueryBuilder('r');
+        $qb->orderBy('r.id', 'DESC')
+        ->setMaxResults(1);
 
-		return $qb->getQuery()
-				->getOneOrNullResult();
-	}
+        return $qb->getQuery()
+                        ->getOneOrNullResult();
+    }
+        
+    /************************************************
+    * fonction qui permet de supprimer un registre
+    * Renvoie la liste des registres non supprimés
+    *************************************************/
+    public function supprimer_registre($id){
+        $qb = $this->createQueryBuilder('r')
+                   ->update()
+                   ->set('r.supprime', TRUE)
+                   ->where('r.id = :id')
+                   ->setParameter('id',$id);
+        return $qb->getQuery()->getResult();
+    }
+    
+    /***************************************************************
+    * fonction qui vérifie si un registre est supprimé ou pas
+    * Renvoie true si le registre est supprimé et false sinon
+    **************************************************************/
+    public function estSupprime($id){
+        $qb = $this->createQueryBuilder('r')
+                   ->where('r.id = :id')
+                   ->setParameter('id',$id)
+                   ->andWhere('r.supprime = :bol')
+                   ->setParameter('bol', TRUE)
+                   ->getQuery();
+        $result = $qb->getOneOrNullResult();
+        if(!$result){
+            return FALSE;
+        }
+        else{
+            return TRUE;
+        }
+    }
+    /*****************************************************************
+    * Recupérer l'ensemble des registres qui ne sont pas supprimés
+    *****************************************************************/
+    public function listRegistres(){
+       //On recupère l'ensemble des registres
+       $qb=$this->createQuerybuilder('r')
+                ->where('r.supprime = :bol')
+                ->setParameter('bol', FALSE);
+       return $qb->getQuery()->getResult();
+    }
 }

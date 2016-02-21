@@ -1,0 +1,40 @@
+#************************************
+#Définition des routes pour Etudiant
+#************************************
+
+smb_etudiant_home:
+    path:     /etudiant/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:index }
+
+smb_etudiant_view:
+    path: /etudiant/{id}/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:view }
+    requirements:
+        id: \d+
+
+smb_etudiant_add:
+    path: /etudiant/add/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:add }
+
+smb_etudiant_edit:
+    path: /etudiant/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:edit}
+    requirements:
+        id: \d+
+
+smb_etudiant_delete:
+    path: /etudiant/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:delete }
+
+smb_etudiant_codification:
+    path: /etudiant/codification/{id}/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:codification }
+    requirements:
+        id: \d+
+
+smb_etudiant_paiement:
+    path: /etudiant/paiement/{id}/
+    defaults: { _controller: SMBLoyerBundle:Etudiant:paiement }
+    requirements:
+        id: \d+
+

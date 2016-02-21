@@ -1,0 +1,24 @@
+#****************************************
+#Définition des routes pour Chambre
+#****************************************
+smb_chambre_home:
+    path: /chambre/index/
+    defaults: { _controller: SMBLoyerBundle:Chambre:index }
+
+smb_chambre_add:
+    path: /chambre/add/{id}/
+    defaults: { _controller: SMBLoyerBundle:Chambre:add }
+    requirements:
+        id: \d+
+        
+smb_chambre_edit:
+    path: /chambre/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Chambre:edit }
+    requirements:
+        id: \d+
+ 
+smb_chambre_delete:
+    path: /chambre/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Chambre:delete }
+    requirements:
+        id: \d+

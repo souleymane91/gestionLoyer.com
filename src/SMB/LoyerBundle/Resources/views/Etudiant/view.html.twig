@@ -17,10 +17,10 @@
 			</div>
 		{% endif %}
 		<div>
-			<a href="{{ path('smb_loyer_edit_etudiant',{'id':etudiant.id}) }}">Modifier les informations de l'étudiant</a>
+			<a href="{{ path('smb_etudiant_edit',{'id':etudiant.id}) }}">Modifier les informations de l'étudiant</a>
 		</div>
 		<div >
-			<a href="{{ path('smb_loyer_home_etudiant') }}">Retour à la liste</a>
+			<a href="{{ path('smb_etudiant_home') }}">Retour à la liste</a>
 		</div>
 	</div>
 {% endblock %}
@@ -47,7 +47,7 @@
 							<td class="libelle">Téléphone</td><td>{{ etudiant.telephone }}</td>
 						</tr>
 						{% if codifier==false %}
-							<a href="{{ path('smb_loyer_codification',{'id':etudiant.id}) }}">Codifier maintenant</a>
+							<a href="{{ path('smb_etudiant_codification',{'id':etudiant.id}) }}">Codifier maintenant</a>
 						{% else %}
 							<tr>
 								<td class="libelle">Chambre</td><td>{{ codification.chambre.numero }}{{ codification.pavion.libelle }}</td>

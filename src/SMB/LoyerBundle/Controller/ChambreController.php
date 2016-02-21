@@ -1,247 +1,116 @@
 <?php
+//src\SMB\LoyerBundle\Controller\ChambreController.php
 
 namespace SMB\LoyerBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 use SMB\LoyerBundle\Entity\Chambre;
 use SMB\LoyerBundle\Form\ChambreType;
 
-/**
- * Chambre controller.
- *
- * @Route("/chambre")
- */
-class ChambreController extends Controller
-{
+class ChambreController extends Controller{
 
-    /**
-     * Lists all Chambre entities.
-     *
-     * @Route("/", name="chambre")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
+	/***********************************************************
+	 * l'action index qui permet de lister toutes les chambres
+	 ***********************************************************/
+	
+	public function indexAction(Request $request){
 
-        $entities = $em->getRepository('SMBLoyerBundle:Chambre')->findAll();
+            $listChambres = Chambre::listChambres($this);
 
-        return array(
-            'entities' => $entities,
-        );
-    }
-    /**
-     * Creates a new Chambre entity.
-     *
-     * @Route("/", name="chambre_create")
-     * @Method("POST")
-     * @Template("SMBLoyerBundle:Chambre:new.html.twig")
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new Chambre();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
+            return $this->render("SMBLoyerBundle:Chambre:index.html.twig",array(
+                'listChambres' => $listChambres
+            ));
+	}
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('chambre_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a form to create a Chambre entity.
-     *
-     * @param Chambre $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Chambre $entity)
-    {
-        $form = $this->createForm(new ChambreType(), $entity, array(
-            'action' => $this->generateUrl('chambre_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new Chambre entity.
-     *
-     * @Route("/new", name="chambre_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new Chambre();
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Finds and displays a Chambre entity.
-     *
-     * @Route("/{id}", name="chambre_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('SMBLoyerBundle:Chambre')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Chambre entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Displays a form to edit an existing Chambre entity.
-     *
-     * @Route("/{id}/edit", name="chambre_edit")
-     * @Method("GET")
-     * @Template()
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('SMBLoyerBundle:Chambre')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Chambre entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-    * Creates a form to edit a Chambre entity.
-    *
-    * @param Chambre $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(Chambre $entity)
-    {
-        $form = $this->createForm(new ChambreType(), $entity, array(
-            'action' => $this->generateUrl('chambre_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-    /**
-     * Edits an existing Chambre entity.
-     *
-     * @Route("/{id}", name="chambre_update")
-     * @Method("PUT")
-     * @Template("SMBLoyerBundle:Chambre:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('SMBLoyerBundle:Chambre')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Chambre entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('chambre_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-    /**
-     * Deletes a Chambre entity.
-     *
-     * @Route("/{id}", name="chambre_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SMBLoyerBundle:Chambre')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Chambre entity.');
+	/****************************************************************************
+	 l'action add qui permet d'ajouter un nouveau chambre
+	 **********************************************************************/
+	
+	public function addAction(Request $request){
+            //création de l'objet chambre
+            $chambre = new Chambre();
+            
+            //création du formulaire d'ajout d'un chambre
+            $form = $this->get('form.factory')->create(new ChambreType(),$chambre);
+            $form->handleRequest($request);
+            //on vérifie si des données ont été postées
+            if($request->getMethod() == "POST"){
+                //on teste si les données entrées sont valides
+                if($form->isValid()){
+                    $em = $this->getDoctrine()
+                               ->getManager();
+                    //on persiste l'objet chambre
+                    $em->persist($chambre);
+                    //on enregistre dans la base
+                    $em->flush();
+                    
+                    //on redirige vers la page d'affichage de la chambre
+                    return $this->redirect($this->generateUrl('smb_chambre_view',array(
+                                                                                    'id' => $chambre->getId()
+                                                                                    )
+                    ));
+                }
+                //les données saisies ne sont pas valides
             }
-
-            $em->remove($entity);
-            $em->flush();
+            //Pas de données postées, on affiche le formulaire d'ajout
+            return $this->render("SMBLoyerBundle:Chambre:add.html.twig");
+	}
+        
+	/**********************************************************************
+	 l'action edit qui permet de modifier les informations d'une chambre
+	 **********************************************************************/
+	
+	public function editAction($id,Request $request){
+            
+            //on recupère la chambre correspondant à $id
+            $chambre = $this->getDoctrine()
+                             ->getManager()
+                             ->getRepository("SMBLoyerBundle:Chambre")
+                             ->find($id);
+            
+            //création du formulaire à partir de l'objet à modifier
+            $form = $this->get('form.factory')->create(new ChambreType(),$chambre);
+            $form->handleRequest($request);
+            //on vérifie si des données ont été postées
+            if($request->getMethod() == "POST"){
+                //on teste si les données entrées sont valides
+                if($form->isValid()){
+                    $em = $this->getDoctrine()
+                               ->getManager();
+                    //on persiste l'objet chambre
+                    $em->persist($chambre);
+                    //on enregistre dans la base
+                    $em->flush();
+                    
+                    //on redirige vers la page d'affichage de la chambre
+                    return $this->redirect($this->generateUrl('smb_chambre_view',array(
+                                                                                    'id' => $chambre->getId()
+                                                                                    )
+                    ));
+                }
+                //les données saisies ne sont pas valides
+            }
+            //Pas de données postées, on affiche le formulaire d'ajout
+            return $this->render("SMBLoyerBundle:Chambre:add.html.twig");
+	}
+        
+        /*********************************************************************
+         * l'action delete qui permet de supprimer une chambre
+         *********************************************************************/
+        public function deleteAction($id,Request $request){
+            
+            $this->getDoctrine()
+                 ->getManager()
+                 ->getRepository("SMBLoyerBundle:Chambre")
+                 ->supprimer_chambre($id);
+            
+            //on redirige vers la page d'affichage de toutes les chambres
+            $this->redirect($this->generateUrl("smb_chambre_home"));
         }
 
-        return $this->redirect($this->generateUrl('chambre'));
-    }
-
-    /**
-     * Creates a form to delete a Chambre entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('chambre_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
 }

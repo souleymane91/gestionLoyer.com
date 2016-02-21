@@ -42,6 +42,7 @@ media="all" /> -->
                 <ul>
                   <li class="niveau2 menu_etudiant"><a href="{{ path('smb_etudiant_home') }}">Etudiants</a></li>
                   <li class="niveau2 menu_paiement"><a href="{{ path('smb_loyer_home') }}">Paiements</a></li>
+                  <li class="niveau2 menu_registre"><a href="{{ path('smb_registre_home') }}">Registres</a></li>
                 </ul>
               </li>
               {% if(is_granted('ROLE_ADMIN')) %}
@@ -50,15 +51,7 @@ media="all" /> -->
                   <ul>
                     <li class="niveau2"><a href="{{ path('smb_user_home') }}">Gestion utilisateurs</a></li>
                     <li class="niveau2"><a href="{{ path('smb_profil_home') }}">Gestion profils</a></li>
-                    <li class="niveau2">
-                      <span><a href="#">Paramètres</a></span>
-                      <!-- <ul>
-                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des registres</a></li>
-                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des chambres</a></li>
-                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des pavion</a></li>
-                        <li class="niveau3"><a href="{{ path('smb_user_home') }}">Gestion des mois</a></li>
-                      </ul> -->
-                    </li>
+                    <li class="niveau2"><a href="{{ path('smb_loyer_parametre') }}">Paramètres</a></li>
                   </ul>
                 </li>
               {% endif %}

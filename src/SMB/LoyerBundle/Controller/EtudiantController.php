@@ -31,7 +31,7 @@ class EtudiantController extends Controller{
 	*/
 	public function indexAction(){
 
-		$listEtudiants=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Etudiant")->findAll();
+		$listEtudiants=  Etudiant::listEtudiants($this);
 
 		return $this->render("SMBLoyerBundle:Etudiant:index.html.twig", 
 			array('listEtudiants' => $listEtudiants
@@ -190,21 +190,57 @@ class EtudiantController extends Controller{
 	***************************************************************/
 	public function deleteAction($id){
 
-		$etudiant=$this->getDoctrine()
-				          ->getManager()
-				 		  ->getRepository("SMBLoyerBundle:Etudiant")
-				 		  ->find($id);
+            $this->getDoctrine()
+                 ->getManager()
+                 ->getRepository("SMBLoyerBundle:Etudiant")
+                 ->supprimer_etudiant($id);
 
-		if(!is_null($etudiant)){
-			$em=$this->getDoctrine()
-					 ->getManager();
-			$em->remove($etudiant);
-			$em->flush();
-		}
-
-		//s'il n'existe aucun utilisateur correspondant à $id 
-		//on affiche la liste des utilisateurs
-		return $this->redirect($this->generateUrl('smb_etudiant_home'));
+            //on affiche la liste des utilisateurs
+            return $this->redirect($this->generateUrl('smb_etudiant_home'));
 	}
 
+        
+        /****************************************************************************
+	 l'action codification qui permet d'ajouter une codification à un étudiant
+	 ****************************************************************************/
+	/**
+	* @Security("has_role('ROLE_GESTIONNAIRE')")
+	*/
+	public function codificationAction($id,Request $request){
+
+		$etudiant=new Etudiant();
+		$etudiant=$this->getDoctrine()
+						->getManager()
+						->getRepository("SMBLoyerBundle:Etudiant")
+						->find($id);
+
+		//on recupère le registre courant
+		$session=$request->getSession();
+		$id_registre=$session->get('id_registre_courant');
+		$registre=new Registre();
+		$registre=$this->getDoctrine()
+						->getManager()
+						->getRepository("SMB\LoyerBundle\Entity\Registre")
+						->find($id_registre);
+
+		$codification=new Codification();
+		$codification->setEtudiant($etudiant);
+		$codification->setRegistre($registre);
+		$form=$this->get('form.factory')->create(new CodificationType(), $codification);
+
+		$form->handleRequest($request);
+		if($form->isValid()){
+			$em=$this->getDoctrine()->getManager();
+			$em->persist($codification);
+			$em->flush();
+
+			return $this->redirect($this->generateUrl("smb_etudiant_view",
+				array('id' => $id)
+			));
+		}
+
+		return $this->render("SMBLoyerBundle:Etudiant:codification.html.twig", 
+			array('etudiant' => $etudiant, 'form' => $form->createView()
+		));
+	}
 }

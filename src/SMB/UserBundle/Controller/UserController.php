@@ -20,10 +20,7 @@ class UserController extends Controller
 	public function indexAction(){
 
 		//on recupère la liste de tous les utilisateurs
-		$listUtilisateurs=$this->getDoctrine()
-							   ->getManager()
-							   ->getRepository("SMBUserBundle:User")
-							   ->findAll();
+		$listUtilisateurs = User::listUtilisateurs($this);
 
 		return $this->render("SMBUserBundle:User:index.html.twig",array(
 			'listUtilisateurs' => $listUtilisateurs));
@@ -266,19 +263,11 @@ class UserController extends Controller
 	***************************************************************/
 	public function deleteAction($id){
 
-		$utilisateur=$this->getDoctrine()
-				          ->getManager()
-				 		  ->getRepository("SMBUserBundle:User")
-				 		  ->find($id);
-
-		if(!is_null($utilisateur)){
-			$em=$this->getDoctrine()
-					 ->getManager();
-			$em->remove($utilisateur);
-			$em->flush();
-		}
-
-		//s'il n'existe aucun utilisateur correspondant à $id 
+                $em=$this->getDoctrine()
+                         ->getManager()
+                         ->getRepository("SMBUserBundle:User")
+                         ->supprimer_utilisateur($id);
+		
 		//on affiche la liste des utilisateurs
 		return $this->redirect($this->generateUrl('smb_user_home'));
 	}

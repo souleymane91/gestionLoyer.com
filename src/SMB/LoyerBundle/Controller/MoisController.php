@@ -1,5 +1,5 @@
 <?php
-//src\SMB\LoyerBundle\Controller\PavionController.php
+//src\SMB\LoyerBundle\Controller\MoisController.php
 
 namespace SMB\LoyerBundle\Controller;
 
@@ -9,35 +9,34 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use SMB\LoyerBundle\Entity\Pavion;
-use SMB\LoyerBundle\Form\PavionType;
+use SMB\LoyerBundle\Entity\Mois;
+use SMB\LoyerBundle\Form\MoisType;
 
-class PavionController extends Controller{
+class MoisController extends Controller{
 
 	/***********************************************************
-	 * l'action index qui permet de lister tous les pavions
+	 * l'action index qui permet de lister tous les mois
 	 ***********************************************************/
 	
 	public function indexAction(Request $request){
 
-            $listPavions = Pavion::listPavions($this);
+            $listMois = Mois::listMois($this);
 
-            return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
-                'listPavions' => $listPavions
+            return $this->render("SMBLoyerBundle:Mois:index.html.twig",array(
+                'listMois' => $listMois
             ));
-            
 	}
 
 	/****************************************************************************
-	 l'action add qui permet d'ajouter un nouveau pavion
+	 l'action add qui permet d'ajouter un nouveau mois
 	 **********************************************************************/
 	
 	public function addAction(Request $request){
-            //création de l'objet pavion
-            $pavion = new Pavion();
+            //création de l'objet mois
+            $mois = new Mois();
             
-            //création du formulaire d'ajout d'un pavion
-            $form = $this->get('form.factory')->create(new PavionType(),$pavion);
+            //création du formulaire d'ajout d'un mois
+            $form = $this->get('form.factory')->create(new MoisType(),$mois);
             $form->handleRequest($request);
             //on vérifie si des données ont été postées
             if($request->getMethod() == "POST"){
@@ -45,37 +44,37 @@ class PavionController extends Controller{
                 if($form->isValid()){
                     $em = $this->getDoctrine()
                                ->getManager();
-                    //on persiste l'objet pavion
-                    $em->persist($pavion);
+                    //on persiste l'objet mois
+                    $em->persist($mois);
                     //on enregistre dans la base
                     $em->flush();
                     
-                    //on redirige vers la page d'affichage du pavion
-                    return $this->redirect($this->generateUrl('smb_pavion_view',array(
-                                                                                    'id' => $pavion->getId()
+                    //on redirige vers la page d'affichage du mois
+                    return $this->redirect($this->generateUrl('smb_mois_view',array(
+                                                                                    'id' => $mois->getId()
                                                                                     )
                     ));
                 }
                 //les données saisies ne sont pas valides
             }
             //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Pavion:add.html.twig");
+            return $this->render("SMBLoyerBundle:Mois:add.html.twig");
 	}
         
-	/**********************************************************************
-	 l'action edit qui permet de modifier les informations d'un pavion
+	/****************************************************************************
+	 l'action edit qui permet de modifier les informations d'un mois
 	 **********************************************************************/
 	
 	public function editAction($id,Request $request){
             
-            //on recupère le pavion correspondant à $id
-            $pavion = $this->getDoctrine()
+            //on recupère le rigistre correspondant à $id
+            $mois = $this->getDoctrine()
                              ->getManager()
-                             ->getRepository("SMBLoyerBundle:Pavion")
+                             ->getRepository("SMBLoyerBundle:Mois")
                              ->find($id);
             
             //création du formulaire à partir de l'objet à modifier
-            $form = $this->get('form.factory')->create(new PavionType(),$pavion);
+            $form = $this->get('form.factory')->create(new MoisType(),$mois);
             $form->handleRequest($request);
             //on vérifie si des données ont été postées
             if($request->getMethod() == "POST"){
@@ -83,35 +82,36 @@ class PavionController extends Controller{
                 if($form->isValid()){
                     $em = $this->getDoctrine()
                                ->getManager();
-                    //on persiste l'objet pavion
-                    $em->persist($pavion);
+                    //on persiste l'objet mois
+                    $em->persist($mois);
                     //on enregistre dans la base
                     $em->flush();
                     
-                    //on redirige vers la page d'affichage du pavion
-                    return $this->redirect($this->generateUrl('smb_pavion_view',array(
-                                                                                    'id' => $pavion->getId()
+                    //on redirige vers la page d'affichage du mois
+                    return $this->redirect($this->generateUrl('smb_mois_view',array(
+                                                                                    'id' => $mois->getId()
                                                                                     )
                     ));
                 }
                 //les données saisies ne sont pas valides
             }
             //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Pavion:add.html.twig");
+            return $this->render("SMBLoyerBundle:Mois:add.html.twig");
 	}
         
         /*********************************************************************
-         * l'action delete qui permet de supprimer un pavion
+         * l'action delete qui permet de supprimer un mois
          *********************************************************************/
         public function deleteAction($id,Request $request){
             
             $this->getDoctrine()
                  ->getManager()
-                 ->getRepository("SMBLoyerBundle:Pavion")
-                 ->supprimer_pavion($id);
+                 ->getRepository("SMBLoyerBundle:Mois")
+                 ->supprimer_mois($id);
             
-            //on redirige vers la page d'affichage de tous les pavions
-            $this->redirect($this->generateUrl("smb_pavion_home"));
+            //on redirige vers la page d'affichage de tous les mois
+            $this->redirect($this->generateUrl("smb_mois_home"));
         }
 
 }
+

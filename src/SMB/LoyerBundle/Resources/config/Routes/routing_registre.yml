@@ -1,0 +1,24 @@
+#****************************************
+#Définition des routes pour Registre
+#****************************************
+smb_registre_home:
+    path: /registre/index/
+    defaults: { _controller: SMBLoyerBundle:Registre:index }
+
+smb_registre_add:
+    path: /registre/add/{id}/
+    defaults: { _controller: SMBLoyerBundle:Registre:add }
+    requirements:
+        id: \d+
+        
+smb_registre_edit:
+    path: /registre/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Registre:edit }
+    requirements:
+        id: \d+
+ 
+smb_registre_delete:
+    path: /registre/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Registre:delete }
+    requirements:
+        id: \d+

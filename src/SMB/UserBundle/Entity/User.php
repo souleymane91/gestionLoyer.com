@@ -131,11 +131,20 @@ class User implements UserInterface{
      * @ORM\Column(name="salt", type="string", length=255)
      */
     private $salt;
+    
+    
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
 
 
     public function __construct(){
         $this->salt=base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
+        $this->supprime = false;
     }
 
     /**
@@ -237,6 +246,10 @@ class User implements UserInterface{
     {
         return $this->salt;
     }
+    
+    public function getSupprime(){
+        return $this->supprime;
+    }
 
     public function eraseCredentials() {
         // Ici nous n'avons rien à effacer. 
@@ -294,6 +307,19 @@ class User implements UserInterface{
 
         return $this;
     }
+    
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return User
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
 
     /**
      * Add profils
@@ -333,5 +359,19 @@ class User implements UserInterface{
     public function getProfils()
     {
         return $this->profils;
+    }
+    
+    
+    /******************************************************
+     * fonction qui recupère l'ensemble des utilisateurs
+     ******************************************************/
+    public static function listUtilisateurs(\SMB\UserBundle\Controller\UserController $cont){
+        //on recupère la liste de tous les utilisateurs
+        //qui n'ont pas été supprimés
+        $listUtilisateurs=$cont->getDoctrine()
+                               ->getManager()
+                               ->getRepository("SMBUserBundle:User")
+                               ->listUtilisateurs();
+        return $listUtilisateurs;
     }
 }

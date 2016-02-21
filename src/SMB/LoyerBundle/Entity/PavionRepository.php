@@ -12,4 +12,47 @@ use Doctrine\ORM\EntityRepository;
  */
 class PavionRepository extends EntityRepository
 {
+        
+    /************************************************
+    * fonction qui permet de supprimer un pavion
+    * Renvoie la liste des pavions non supprimés
+    *************************************************/
+    public function supprimer_pavion($id){
+        $qb = $this->createQueryBuilder('p')
+                   ->update()
+                   ->set('p.supprime', TRUE)
+                   ->where('p.id = :id')
+                   ->setParameter('id',$id);
+        return $qb->getQuery()->getResult();
+    }
+    
+    /***************************************************************
+    * fonction qui vérifie si un pavion est supprimé ou pas
+    * Renvoie true si le pavion est supprimé et false sinon
+    **************************************************************/
+    public function estSupprime($id){
+        $qb = $this->createQueryBuilder('p')
+                   ->where('p.id = :id')
+                   ->setParameter('id',$id)
+                   ->andWhere('p.supprime = :bol')
+                   ->setParameter('bol', TRUE)
+                   ->getQuery();
+        $result = $qb->getOneOrNullResult();
+        if(!$result){
+            return FALSE;
+        }
+        else{
+            return TRUE;
+        }
+    }
+    /*****************************************************************
+    * Recupérer l'ensemble des pavions qui ne sont pas supprimés
+    *****************************************************************/
+    public function listPavions(){
+       //On recupère l'ensemble des pavions
+       $qb=$this->createQuerybuilder('p')
+                ->where('p.supprime = :bol')
+                ->setParameter('bol', FALSE);
+       return $qb->getQuery()->getResult();
+    }    
 }

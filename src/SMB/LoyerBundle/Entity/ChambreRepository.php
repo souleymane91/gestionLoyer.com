@@ -12,4 +12,47 @@ use Doctrine\ORM\EntityRepository;
  */
 class ChambreRepository extends EntityRepository
 {
+        
+    /************************************************
+    * fonction qui permet de supprimer une chambre
+    * Renvoie la liste des chambres non supprimés
+    *************************************************/
+    public function supprimer_chambre($id){
+        $qb = $this->createQueryBuilder('c')
+                   ->update()
+                   ->set('c.supprime', TRUE)
+                   ->where('c.id = :id')
+                   ->setParameter('id',$id);
+        return $qb->getQuery()->getResult();
+    }
+    
+    /***************************************************************
+    * fonction qui vérifie si une chambre est supprimé ou pas
+    * Renvoie true si le chambre est supprimé et false sinon
+    **************************************************************/
+    public function estSupprime($id){
+        $qb = $this->createQueryBuilder('c')
+                   ->where('c.id = :id')
+                   ->setParameter('id',$id)
+                   ->andWhere('c.supprime = :bol')
+                   ->setParameter('bol', TRUE)
+                   ->getQuery();
+        $result = $qb->getOneOrNullResult();
+        if(!$result){
+            return FALSE;
+        }
+        else{
+            return TRUE;
+        }
+    }
+    /*****************************************************************
+    * Recupérer l'ensemble des chambres qui ne sont pas supprimés
+    *****************************************************************/
+    public function listChambres(){
+       //On recupère l'ensemble des chambres
+       $qb=$this->createQuerybuilder('c')
+                ->where('c.supprime = :bol')
+                ->setParameter('bol', FALSE);
+       return $qb->getQuery()->getResult();
+    }
 }

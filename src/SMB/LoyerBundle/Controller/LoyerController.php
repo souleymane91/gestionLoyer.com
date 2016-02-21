@@ -74,32 +74,34 @@ class LoyerController extends Controller{
 
 		$etudiant=new Etudiant();
 		$etudiant=$this->getDoctrine()
-						->getManager()
-						->getRepository("SMBLoyerBundle:Etudiant")
-						->find($id);
+                               ->getManager()
+                               ->getRepository("SMBLoyerBundle:Etudiant")
+                               ->find($id);
 
 		//on recupère le registre courant
 		$session=$request->getSession();
 		$id_registre=$session->get('id_registre_courant');
 		$registre=new Registre();
 		$registre=$this->getDoctrine()
-						->getManager()
-						->getRepository("SMB\LoyerBundle\Entity\Registre")
-						->find($id_registre);
+                               ->getManager()
+                               ->getRepository("SMB\LoyerBundle\Entity\Registre")
+                               ->find($id_registre);
 
 		$codification=new Codification();
 		$codification->setEtudiant($etudiant);
 		$codification->setRegistre($registre);
-		$form=$this->get('form.factory')->create(new CodificationType(), $codification);
+		$form=$this->get('form.factory')
+                           ->create(new CodificationType(), $codification);
 
 		$form->handleRequest($request);
 		if($form->isValid()){
-			$em=$this->getDoctrine()->getManager();
+			$em=$this->getDoctrine()
+                                 ->getManager();
 			$em->persist($codification);
 			$em->flush();
 
 			return $this->redirect($this->generateUrl("smb_loyer_view_etudiant",
-				array('id' => $id)
+                            array('id' => $id)
 			));
 		}
 
@@ -170,106 +172,15 @@ class LoyerController extends Controller{
 			));
 	}
 
-	/******************************************************************************
-	 * l'action indexRegistre qui affiche la liste de tous les registres existants
-	 ******************************************************************************/
-	/**
-	* @Security("has_role('ROLE_GESTIONNAIRE') or has_role('ROLE_USER')")
-	*/
-	public function indexRegistreAction(){
-
-		$listRegistres=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Registre")->findAll();
-
-		return $this->render("SMBLoyerBundle:Loyer:indexRegistre.html.twig", 
-			array('listRegistres' => $listRegistres
-		));
-	}
-
-
-	 /****************************************************************************
-	 l'action addRegistre qui permet de créer un nouveau registre
-	 ************************************************************************/
-	/**
-	* @Security("has_role('ROLE_GESTIONNAIRE')")
-	*/
-	public function addRegistreAction(Request $request){
-
-		//Création de l'objet Registre
-		$registre= new Registre();
-
-		//Création du formulaire
-		$form=$this->get('form.factory')->create(new RegistreType(), $registre);
-
-		$form->handleRequest($request);
-
-		//on enregistre les données tapées par le visiteur en testant si elles sont valides
-		if($form->isValid()){
-			$em=$this->getDoctrine()->getManager();
-			$em->persist($registre);
-			$em->flush();
-
-			return $this->redirect($this->generateUrl("smb_loyer_view_registre",array('id'=>$registre->getId())));
-		}
-
-		return $this->render("SMBLoyerBundle:Loyer:addRegistre.html.twig",
-			array('form' => $form->createView()
-		));
-	}
-
-
 	/****************************************************************************
-	 l'action editRegistre qui permet de modifier les informations d'un registre
-	 ****************************************************************************/
-	/**
-	* @Security("has_role('ROLE_GESTIONNAIRE')")
-	*/
-	public function editRegistreAction($id, Request $request){
-
-		$registre= new Registre();
-		$registre=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Registre")->find($id);
-
-		$form= $this->get('form.factory')->create(new RegistreType(), $registre);
-		$form->handleRequest($request);
-		if($form->isValid()){
-			$em=$this->getDoctrine()->getManager();
-			$em->flush();
-
-			return $this->redirect($this->generateUrl("smb_loyer_view_registre",
-				array('id'=>$registre->getId())
-			));
-		}
-
-		return $this->render("SMBLoyerBundle:Loyer:editRegistre.html.twig", 
-			array('form' => $form->createView()
-		));
-	}
-
-
-	/****************************************************************************
-	 l'action viewRegistre qui permet d'afficher les informations d'un registre
-	 ****************************************************************************/
-	/**
-	* @Security("has_role('ROLE_GESTIONNAIRE') or has_role('ROLE_USER')")
-	*/
-	public function viewRegistreAction($id, Request $request){
-
-		$registre= new Registre();
-		$registre=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Registre")->find($id);
-
-		return $this->render("SMBLoyerBundle:Loyer:viewRegistre.html.twig", 
-			array('registre' => $registre
-		));
-	}
-
-
-	/****************************************************************************
-	 l'action admin qui permet de gérer la partie adminstration de l'application
+	 l'action parametre qui permet de gérer le paramètrage de l'application
 	 ****************************************************************************/
 	/**
 	* @Security("has_role('ROLE_ADMIN')")
 	*/
-	public function adminAction(Request $request){
-		return $this->render("SMBLoyerBundle:Loyer:admin.html.twig");
+	public function parametreAction(Request $request){
+                
+            return $this->render("SMBLoyerBundle:Loyer:parametre.html.twig");
 	}
 
 }

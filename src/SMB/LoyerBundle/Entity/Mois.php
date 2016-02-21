@@ -36,6 +36,12 @@ class Mois
      */
     private $libelle;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean")
+     */
+    private $supprime;
 
     /**
      * Get id
@@ -69,6 +75,30 @@ class Mois
     {
         return $this->libelle;
     }
+    
+    /**
+     * Set supprime
+     *
+     * @param boolean $supprime
+     * @return Mois
+     */
+    public function setSupprime($supprime)
+    {
+        $this->supprime = $supprime;
+
+        return $this;
+    }
+
+    /**
+     * Get supprime
+     *
+     * @return boolean 
+     */
+    public function getSupprime()
+    {
+        return $this->supprime;
+    }
+    
     /**
      * Constructor
      */
@@ -108,5 +138,18 @@ class Mois
     public function getPaiements()
     {
         return $this->paiements;
+    }
+    
+    /******************************************************
+     * fonction qui recupère la liste de tous les mois
+     ******************************************************/
+    public static function listMois(\SMB\LoyerBundle\Controller\MoisController $cont){
+        //on recupère la liste de tous les mois
+        //qui n'ont pas été supprimés
+        $listMois=$cont->getDoctrine()
+                            ->getManager()
+                            ->getRepository("SMBLoyerBundle:Mois")
+                            ->listMois();
+        return $listMois;
     }
 }
