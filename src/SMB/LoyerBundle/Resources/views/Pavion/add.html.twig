@@ -1,9 +1,12 @@
 {# src\SMB\LoyerBundle\Resources\views\Pavion\add.html.twig #}
 
 
-<div class="block ajout_pavion col-sm-6">
-        {{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
-                <h5 class="titre">Nouveau pavion </h5>
+<div class="block ajouter_pavion col-sm-6">
+        {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
+        <form id="formulaire_ajout">
+                <div class="titre_block">
+                    <h5 class="titre">Nouveau pavion </h5>
+                </div>
 
                 {{ form_errors(form) }}
                 <div class="row">
@@ -21,12 +24,57 @@
 
 
                 </div>
-                <div>
-                    <a href="#" class="annuler_ajout_pavion">Annuler</a>
-                </div>
-                <div class="row">
-                        {{ form_widget(form.enregistrer, {'atr': {'class': 'btn btn-default'}}) }}
-                </div>
 
-        {{ form_end(form) }}
+      {#  {{ form_end(form) }}#}
+        </form>
+        <div class="boutons_add">
+            <button class="annuler_ajout_pavion">Annuler</button>
+            <button class="enregistrer_pavion">Enregistrer</button>
+        </div>
 </div>
+        
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+        /***************************************************
+         * traitement du click sur le bouton d'annulagion 
+         * de l'ajout d'un pavion
+         ***************************************************/
+        $('button.annuler_ajout_pavion').click(function(){
+           $('.pavion_ajout').html(""); 
+        });
+
+        /**************************************************
+         * Traitement du click sur le bouton d'ajout d'un 
+         * nouveau pavion 
+         **************************************************/
+        $('.enregistrer_pavion').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+            //on envoie le type de la requete
+            var requete = "ajout";
+            var nom_pavion = $('#smb_loyerbundle_pavion_libelle').val();
+            var DATA = 'nom_pavion='+nom_pavion+"&requete="+requete;
+            if(nom_pavion == ""){
+                //on enlève l'image loader
+                 $('#loader').hide();
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('smb_pavion_add') }}",
+                    data: DATA,
+                    success: function(data){
+                        $('.pavion_affichage').html(data);
+                        $('.pavion_ajout').html("");
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    },
+                    error: function(resultat,statut,error){
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    }
+                });                
+            }
+        });
+    });
+</script>

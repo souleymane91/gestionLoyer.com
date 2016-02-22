@@ -16,7 +16,6 @@ class PavionType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('enregistrer', 'submit') 
         ;
     }
     

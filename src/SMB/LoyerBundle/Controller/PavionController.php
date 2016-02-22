@@ -21,11 +21,11 @@ class PavionController extends Controller{
 	public function indexAction(Request $request){
 
             $listPavions = Pavion::listPavions($this);
-
+         
             return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
                 'listPavions' => $listPavions
-            ));
-            
+            ));                
+                        
 	}
 
 	/****************************************************************************
@@ -36,32 +36,37 @@ class PavionController extends Controller{
             //création de l'objet pavion
             $pavion = new Pavion();
             
-            //création du formulaire d'ajout d'un pavion
-            $form = $this->get('form.factory')->create(new PavionType(),$pavion);
-            $form->handleRequest($request);
-            //on vérifie si des données ont été postées
-            if($request->getMethod() == "POST"){
-                //on teste si les données entrées sont valides
-                if($form->isValid()){
-                    $em = $this->getDoctrine()
-                               ->getManager();
-                    //on persiste l'objet pavion
-                    $em->persist($pavion);
-                    //on enregistre dans la base
-                    $em->flush();
-                    
-                    //on redirige vers la page d'affichage du pavion
-                    return $this->redirect($this->generateUrl('smb_loyer_parametre',array(
-                                                                                    'id' => $pavion->getId()
-                                                                                    )
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                $requete = $request->request->get('requete');
+                if($requete == "affichage"){
+                    //création du formulaire d'ajout d'un pavion
+                    $form = $this->get('form.factory')->create(new PavionType(),$pavion);
+                    return $this->render("SMBLoyerBundle:Pavion:add.html.twig",array(
+                        'form' => $form->createView()
                     ));
                 }
-                //les données saisies ne sont pas valides
+                else{
+                    if($requete == "ajout"){
+                        $nom_pavion = $request->request->get('nom_pavion');
+                        $pavion->setLibelle($nom_pavion);
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $em->persist($pavion);
+                        $em->flush();                   
+
+                        //on envoie la liste des pavions
+                        $listPavions = Pavion::listPavions($this);
+
+                        return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
+                            'listPavions' => $listPavions
+                        ));                        
+                    }
+                }
             }
-            //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Pavion:add.html.twig",array(
-                'form' => $form->createView()
-            ));
+            else{
+                throw new Exception("Pas de Requete envoyée!",1);
+            }
 	}
         
 	/**********************************************************************

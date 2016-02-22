@@ -10,27 +10,25 @@
     <div id="parametre">
         <div class="menu_parametre">
             <ul>
-                <li id="pavion" class="menu menu_pavion active"><a href="#">Pavions</a></li>
+                <li class="menu menu_pavion active"><a id="pavion" href="#">Pavions</a></li>
                 <li id="chambre" class="menu menu_chambre"><a href="#">Chambres</a></li>
                 <li id="mois" class="menu menu_mois"><a href="#">Mois</a></li>
                 <li id="restauration" class="menu menu_restauration"><a href="#">Restaurer</a></li>
             </ul>
         </div>
-        <div class="liste pavion">
+        <div id="contenu_parametre" class="liste pavion">
             <div class="pavion_affichage">
-                {{ render(controller('SMBLoyerBundle:Pavion:index'))}}
+                {{ render(controller('SMBLoyerBundle:Pavion:index')) }}
             </div>
-            <div class="pavion_ajout" style="display: none">
-                {{ render(controller('SMBLoyerBundle:Pavion:add')) }}
+            <div class="pavion_ajout">
             </div>
             <div class="pavion_modification">
-{#                {{ render(controller('SMBLoyerBundle:Pavion:edit')) }}#}
             </div>
         </div>
 
         <div class="liste chambre" style="display:none">
             <div class="chambre_affichage">
-                {{ render(controller('SMBLoyerBundle:Chambre:index')) }}
+                {#{{ render(controller('SMBLoyerBundle:Chambre:index')) }}#}
             </div>
             <div class="chambre_ajout">
 {#                {{ render(controller('SMBLoyerBundle:Chambre:add')) }}#}
@@ -54,25 +52,37 @@
     </div>
         
     {# **************************************************
-     * l'ensemble du code jquery se trouve ici
+     * l'ensemble du code javascript se trouve ici
      *****************************************************#}
     <script type="text/javascript">
             $(document).ready(function(){
-                $('.menu').click(function(){
-                    $('.menu').removeClass('active');
-                    $(this).addClass('active');
-                    var ident = $(this).attr('id');
+                
+                /**************************************
+                 * gestion du click sur le menu pavion
+                 * la liste des pavions sera afficher
+                 **************************************/
+                $('#pavion').click(function(){
                     
-                    $('.liste').hide();
-                    $('.'+ident).show(15);
+                    //chargement de l'image loader
+                    $('#loader').show();
+                    var DATA="";
+                    $.ajax({
+                        type:"POST",
+                        url:"{{path('smb_pavion_home')}}",
+                        data:DATA,
+                        success: function(data){
+                            $('.pavion_affichage').html(data);
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        },
+                        error: function(){
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        }
+                    });
+                    
                 });
                 
-                $('.ajout_pavion').click(function(){
-                    $('.pavion_ajout').show();
-                });
-                $('.annuler_ajout_pavion').click(function(){
-                   $('.pavion_ajout').hide(); 
-                });
             });
     </script>
     
