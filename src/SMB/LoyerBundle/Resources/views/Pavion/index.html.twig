@@ -35,6 +35,8 @@
         <li><button class="suppression_pavion supprimer">Supprimer</button></li>
     </ul>
 </div>
+<div id="message_erreur" title="Message d'erreur">
+</div>
 </div>
                 
 <script type="text/javascript">
@@ -54,6 +56,8 @@
                 url:"{{ path('smb_pavion_add')}}",
                 data:DATA,
                 success: function(data){
+                    $('.pavion_ajout').remove();
+                    $('.pavion_modification').remove();
                     $('#contenu_parametre').append(data);
                     //on enlève l'image loader
                     $('#loader').hide();
@@ -77,15 +81,15 @@
             $("input[type='checkbox']:checked").each(function(){
                 nbre++; 
                 id = $(this).attr('id');
-                console.log("nombre: "+nbre);
-                console.log("id: "+id);
             }); 
             //si aucun élément n'a été selectionné
             //on demande à choisir un élément à modifier
             if(nbre === 0 ){
                 //on enlève l'image loader
                 $('#loader').hide();
-                alert("Veuillez choisir un élément à modifier!");
+                $('#message_erreur').html("Veuillez choisir un élément à modifier!");
+                $('#message_erreur').dialog({modal:true,autopen:false});
+                //alert("Veuillez choisir un élément à modifier!");
             }
             else{
                 //si plusieurs élément ont été selectionnés
@@ -93,7 +97,8 @@
                 if(nbre > 1){
                     //on enlève l'image loader
                     $('#loader').hide();
-                    alert("Vous ne pouvez pas modifier plusieurs éléments en même temps!");
+                    $('#message_erreur').html("Vous ne pouvez pas modifier plusieurs éléments en même temps!");
+                    $('#message_erreur').dialog({modal:true,autopen:false});
                 }
                 else{ //un seul élément est choisi, on peut le modifier
                     
@@ -113,6 +118,7 @@
                         data:DATA,
                         success: function(data){
                             $('.pavion_ajout').remove();
+                            $('.pavion_modification').remove();
                             $('#contenu_parametre').append(data);
                             //on enlève l'image loader
                             $('#loader').hide();

@@ -12,6 +12,7 @@
      <!-- <link rel="stylesheet" href="{{asset('bundles/bootstrap/css/bootstrap.min.css') }}" type="text/css"
 media="all" /> -->
      <link rel="stylesheet" href="{{asset('bundles/loyer/css/screen.css') }}" type="text/css"/>
+     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css"/>
      <link rel="stylsheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css"/>
      <!-- <link rel="stylesheet" href="{{asset('bundles/css/style.css') }}" type="text/css"> -->
     <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
@@ -67,8 +68,9 @@ media="all" /> -->
           </div>
         {% block scripts %}
           <script src="{{ asset('bundles/js/jquery-2.1.1.min.js') }}"></script>
-          <!-- <script src="{{ asset('bundles/js/script.js') }}"></script>
-          <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script> -->
+          <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+{#          <script src="{{ asset('bundles/js/script.js') }}"></script>#}
+          <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
         {% endblock %}
         {% block body %}
         {% endblock %}
