@@ -1,22 +1,22 @@
-{# src\SMB\LoyerBundle\Resources\views\Pavion\add.html.twig #}
+{# src\SMB\LoyerBundle\Resources\views\Chambre\add.html.twig #}
 
-<div class="pavion_ajout">
-<div class="block ajouter_pavion col-sm-6">
+<div class="chambre_ajout">
+<div class="block ajouter_chambre col-sm-6">
         {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
         <form id="formulaire_ajout">
                 <div class="titre_block">
-                    <h5 class="titre">Nouveau pavion </h5>
+                    <h5 class="titre">Nouveau numéro </h5>
                 </div>
 
                 {{ form_errors(form) }}
                 <div class="row">
                         <div class="col-sm-10">
-                                {# personalisation du champ libelle #}
+                                {# personalisation du champ numero #}
                                 <div class="row">
                                 <div class="form-group">
-                                        {{ form_label(form.libelle, "Nom du pavion: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-                                        {{ form_widget(form.libelle, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-                                        <span class="nom_pavion_erreur"></span>
+                                        {{ form_label(form.numero, "Numéro de chambre: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_widget(form.numero, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                                        <span class="nom_chambre_erreur"></span>
                                         
                                 </div>
                                 </div>
@@ -29,8 +29,8 @@
       {#  {{ form_end(form) }}#}
         </form>
         <div class="boutons_add">
-            <button class="annuler_ajout_pavion">Annuler</button>
-            <button class="enregistrer_pavion">Enregistrer</button>
+            <button class="annuler_ajout_chambre">Annuler</button>
+            <button class="enregistrer_chambre">Enregistrer</button>
         </div>
 </div>
 </div>
@@ -39,12 +39,12 @@
     $(document).ready(function(){
         /*******************************************
          * fonction qui permet de vérifier si un
-         * nom de pavion est valide
+         * numéro de chambre est valide
          *******************************************/
-        function estValide(nom){
+        function estValide(numero){
             //le nom de pavion ne doit commencer 
             //par au minimum une lettre
-            if(/^[a-zA-Z]{1,}[0-9a-zA-Z]{1,}$/i.test(nom)){
+            if(/^[1-9][0-9]{1,4}$/i.test(numero)){
                 return true;                
             }else{
                 return false;                
@@ -52,50 +52,48 @@
         }
         
         /***************************************************
-         * traitement du click sur le bouton d'annulagion 
-         * de l'ajout d'un pavion
+         * traitement du click sur le bouton d'annulation 
+         * de l'ajout d'un numéro de chambre
          ***************************************************/
-        $('button.annuler_ajout_pavion').click(function(){
-           $('.pavion_ajout').html(""); 
+        $('button.annuler_ajout_chambre').click(function(){
+           $('.chambre_ajout').html(""); 
         });
 
         /**************************************************
          * Traitement du click sur le bouton d'ajout d'un 
-         * nouveau pavion 
+         * numéro de chambre 
          **************************************************/
-        $('.enregistrer_pavion').click(function(){
+        $('.enregistrer_chambre').click(function(){
             //on charge l'image loader
             $('#loader').show();
             //on envoie le type de la requete
             var requete = "ajout";
-            var nom_pavion = $('#smb_loyerbundle_pavion_libelle').val();
-            var DATA = 'nom_pavion='+nom_pavion+"&requete="+requete;
+            var numero_chambre = $('#smb_loyerbundle_chambre_numero').val();
+            var DATA = 'numero_chambre='+numero_chambre+"&requete="+requete;
             
-            //si le champ de nom ne peut pas être vide
-            if(nom_pavion === ""){
+            //le champ de numero ne peut pas être vide
+            if(numero_chambre === ""){
                 //on enlève l'image loader
                  $('#loader').hide();
-                 console.log("vide");
                 //on met un message d'erreur
-                $('.nom_pavion_erreur').html("Renseignez le nom du pavion");
+                $('.nom_chambre_erreur').html("Veuillez renseignez un numéro");
                 //on enlève l'image loader
                 $('#loader').hide();
             }else{
                 //le champ doit être valide
-                if(!estValide(nom_pavion)){
-                    console.log("pas valide");
+                if(!estValide(numero_chambre)){
                     //on met un message d'erreur
-                    $('.nom_pavion_erreur').html("Donnez un nom valide");
+                    $('.nom_chambre_erreur').html("Donnez un numero valide");
                     //on enlève l'image loader
                     $('#loader').hide();
                 }
                 else{
-                    //le nom est valide on l'envoie dans la base
+                    //le numero est valide on l'envoie dans la base
                     //aucune erreur n'est affichée
-                    $('.nom_pavion_erreur').html("");
+                    $('.nom_chambre_erreur').html("");
                     $.ajax({
                         type: "POST",
-                        url: "{{ path('smb_pavion_add') }}",
+                        url: "{{ path('smb_chambre_add') }}",
                         data: DATA,
                         success: function(data){
                             $('#contenu_parametre').html(data);
@@ -111,4 +109,3 @@
             }            
         });
     });
-</script>

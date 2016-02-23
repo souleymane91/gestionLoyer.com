@@ -1,6 +1,6 @@
 {# src\SMB\LoyerBundle\Resources\views\Pavion\index.html.twig #}
 
-
+<div class="pavion_affichage">
 <div class="block block_pavion col-sm-12">
     <div class="liste_pavion col-sm-10">
         <div class="titre_block">
@@ -35,6 +35,7 @@
         <li><button class="suppression_pavion supprimer">Supprimer</button></li>
     </ul>
 </div>
+</div>
                 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -53,7 +54,7 @@
                 url:"{{ path('smb_pavion_add')}}",
                 data:DATA,
                 success: function(data){
-                    $('.pavion_ajout').html(data);
+                    $('#contenu_parametre').append(data);
                     //on enlève l'image loader
                     $('#loader').hide();
                 },

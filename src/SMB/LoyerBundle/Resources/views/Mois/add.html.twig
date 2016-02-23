@@ -1,11 +1,11 @@
-{# src\SMB\LoyerBundle\Resources\views\Pavion\add.html.twig #}
+{# src\SMB\LoyerBundle\Resources\views\Mois\add.html.twig #}
 
-<div class="pavion_ajout">
-<div class="block ajouter_pavion col-sm-6">
+<div class="mois_ajout">
+<div class="block ajouter_mois col-sm-6">
         {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
         <form id="formulaire_ajout">
                 <div class="titre_block">
-                    <h5 class="titre">Nouveau pavion </h5>
+                    <h5 class="titre">Nouveau Mois </h5>
                 </div>
 
                 {{ form_errors(form) }}
@@ -14,9 +14,9 @@
                                 {# personalisation du champ libelle #}
                                 <div class="row">
                                 <div class="form-group">
-                                        {{ form_label(form.libelle, "Nom du pavion: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_label(form.libelle, "Nom du mois: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
                                         {{ form_widget(form.libelle, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-                                        <span class="nom_pavion_erreur"></span>
+                                        <span class="nom_mois_erreur"></span>
                                         
                                 </div>
                                 </div>
@@ -29,8 +29,8 @@
       {#  {{ form_end(form) }}#}
         </form>
         <div class="boutons_add">
-            <button class="annuler_ajout_pavion">Annuler</button>
-            <button class="enregistrer_pavion">Enregistrer</button>
+            <button class="annuler_ajout_mois">Annuler</button>
+            <button class="enregistrer_mois">Enregistrer</button>
         </div>
 </div>
 </div>
@@ -39,12 +39,11 @@
     $(document).ready(function(){
         /*******************************************
          * fonction qui permet de vérifier si un
-         * nom de pavion est valide
+         * mois est valide
          *******************************************/
-        function estValide(nom){
-            //le nom de pavion ne doit commencer 
-            //par au minimum une lettre
-            if(/^[a-zA-Z]{1,}[0-9a-zA-Z]{1,}$/i.test(nom)){
+        function estValide(mois){
+            //les mois sont connus d'avance 
+            if(/^janvier|fevrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|decembre$/i.test(mois)){
                 return true;                
             }else{
                 return false;                
@@ -52,50 +51,47 @@
         }
         
         /***************************************************
-         * traitement du click sur le bouton d'annulagion 
-         * de l'ajout d'un pavion
+         * traitement du click sur le bouton d'annulation 
+         * de l'ajout d'un mois
          ***************************************************/
-        $('button.annuler_ajout_pavion').click(function(){
-           $('.pavion_ajout').html(""); 
+        $('button.annuler_ajout_mois').click(function(){
+           $('.mois_ajout').html(""); 
         });
 
-        /**************************************************
-         * Traitement du click sur le bouton d'ajout d'un 
-         * nouveau pavion 
-         **************************************************/
-        $('.enregistrer_pavion').click(function(){
+        /*****************************************************
+         * Traitement du click sur le bouton d'ajout d'un mois 
+         *****************************************************/
+        $('.enregistrer_mois').click(function(){
             //on charge l'image loader
             $('#loader').show();
             //on envoie le type de la requete
             var requete = "ajout";
-            var nom_pavion = $('#smb_loyerbundle_pavion_libelle').val();
-            var DATA = 'nom_pavion='+nom_pavion+"&requete="+requete;
+            var mois = $('#smb_loyerbundle_mois_libelle').val();
+            var DATA = 'mois='+mois+"&requete="+requete;
             
-            //si le champ de nom ne peut pas être vide
-            if(nom_pavion === ""){
+            //le champ du mois ne peut pas être vide
+            if(mois === ""){
                 //on enlève l'image loader
                  $('#loader').hide();
-                 console.log("vide");
                 //on met un message d'erreur
-                $('.nom_pavion_erreur').html("Renseignez le nom du pavion");
+                $('.nom_mois_erreur').html("Veuillez renseignez un mois");
                 //on enlève l'image loader
                 $('#loader').hide();
             }else{
                 //le champ doit être valide
-                if(!estValide(nom_pavion)){
-                    console.log("pas valide");
+                if(!estValide(mois)){
                     //on met un message d'erreur
-                    $('.nom_pavion_erreur').html("Donnez un nom valide");
+                    $('.nom_mois_erreur').html("Donnez un mois valide");
                     //on enlève l'image loader
                     $('#loader').hide();
                 }
                 else{
-                    //le nom est valide on l'envoie dans la base
+                    //le mois est valide on l'envoie dans la base
                     //aucune erreur n'est affichée
-                    $('.nom_pavion_erreur').html("");
+                    $('.nom_mois_erreur').html("");
                     $.ajax({
                         type: "POST",
-                        url: "{{ path('smb_pavion_add') }}",
+                        url: "{{ path('smb_mois_add') }}",
                         data: DATA,
                         success: function(data){
                             $('#contenu_parametre').html(data);
@@ -111,4 +107,3 @@
             }            
         });
     });
-</script>

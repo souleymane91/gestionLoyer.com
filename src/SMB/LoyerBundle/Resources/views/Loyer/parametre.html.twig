@@ -10,80 +10,114 @@
     <div id="parametre">
         <div class="menu_parametre">
             <ul>
-                <li class="menu menu_pavion active"><a id="pavion" href="#">Pavions</a></li>
+                <li id="pavion" class="menu menu_pavion active"><a href="#">Pavions</a></li>
                 <li id="chambre" class="menu menu_chambre"><a href="#">Chambres</a></li>
                 <li id="mois" class="menu menu_mois"><a href="#">Mois</a></li>
                 <li id="restauration" class="menu menu_restauration"><a href="#">Restaurer</a></li>
             </ul>
         </div>
         <div id="contenu_parametre" class="liste pavion">
-            <div class="pavion_affichage">
-                {{ render(controller('SMBLoyerBundle:Pavion:index')) }}
-            </div>
-            <div class="pavion_ajout">
-            </div>
-            <div class="pavion_modification">
-            </div>
+            {# au premier chargement le contenu de la page est la liste des pavions #}
+            {{ render(controller('SMBLoyerBundle:Pavion:index')) }}
         </div>
 
-        <div class="liste chambre" style="display:none">
-            <div class="chambre_affichage">
-                {#{{ render(controller('SMBLoyerBundle:Chambre:index')) }}#}
-            </div>
-            <div class="chambre_ajout">
-{#                {{ render(controller('SMBLoyerBundle:Chambre:add')) }}#}
-            </div>
-            <div class="chambre_modification">
-{#                {{ render(controller('SMBLoyerBundle:Chambre:edit')) }}#}
-            </div>
-        </div>
-
-        <div class="liste mois" style="display:none">
-            <div class="mois_affichage">
-                {{ render(controller('SMBLoyerBundle:Mois:index')) }}
-            </div>
-            <div class="mois_ajout">
-{#                {{ render(controller('SMBLoyerBundle:Mois:add')) }}#}
-            </div>
-            <div class="mois_modification">
-{#                {{ render(controller('SMBLoyerBundle:Mois:edit')) }}#}
-            </div>
-        </div>
     </div>
         
     {# **************************************************
      * l'ensemble du code javascript se trouve ici
      *****************************************************#}
     <script type="text/javascript">
-            $(document).ready(function(){
+        
+        $(document).ready(function(){
+
+            /**************************************
+             * gestion du click sur le menu pavion
+             * la liste des pavions sera affichée
+             **************************************/
+            $('#pavion').click(function(){
+                //le menu pavion est actif
+                $('.menu').removeClass('active');
+                $(this).addClass('active');
                 
-                /**************************************
-                 * gestion du click sur le menu pavion
-                 * la liste des pavions sera afficher
-                 **************************************/
-                $('#pavion').click(function(){
-                    
-                    //chargement de l'image loader
-                    $('#loader').show();
-                    var DATA="";
-                    $.ajax({
-                        type:"POST",
-                        url:"{{path('smb_pavion_home')}}",
-                        data:DATA,
-                        success: function(data){
-                            $('.pavion_affichage').html(data);
-                            //on enlève l'image loader
-                            $('#loader').hide();
-                        },
-                        error: function(){
-                            //on enlève l'image loader
-                            $('#loader').hide();
-                        }
-                    });
-                    
+                //chargement de l'image loader
+                $('#loader').show();
+                var DATA="";
+                $.ajax({
+                    type:"POST",
+                    url:"{{path('smb_pavion_home')}}",
+                    data:DATA,
+                    success: function(data){
+                        $('#contenu_parametre').html(data);
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    },
+                    error: function(){
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    }
                 });
-                
+
             });
+            
+            /**************************************
+             * gestion du click sur le menu chambre
+             * la liste des chambres sera affichée
+             **************************************/
+            $('#chambre').click(function(){
+                //le menu chambre est actif
+                $('.menu').removeClass('active');
+                $(this).addClass('active');
+                
+                //chargement de l'image loader
+                $('#loader').show();
+                var DATA="";
+                $.ajax({
+                    type:"POST",
+                    url:"{{path('smb_chambre_home')}}",
+                    data:DATA,
+                    success: function(data){
+                        $('#contenu_parametre').html(data);
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    },
+                    error: function(){
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    }
+                });
+
+            });
+            
+            /**************************************
+             * gestion du click sur le menu mois
+             * la liste des mois sera affichée
+             **************************************/
+            $('#mois').click(function(){
+                //le menu mois est actif
+                $('.menu').removeClass('active');
+                $(this).addClass('active');
+                
+                //chargement de l'image loader
+                $('#loader').show();
+                var DATA="";
+                $.ajax({
+                    type:"POST",
+                    url:"{{path('smb_mois_home')}}",
+                    data:DATA,
+                    success: function(data){
+                        $('#contenu_parametre').html(data);
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    },
+                    error: function(){
+                        //on enlève l'image loader
+                        $('#loader').hide();
+                    }
+                });
+
+            });
+
+        });
     </script>
     
 {% endblock %}

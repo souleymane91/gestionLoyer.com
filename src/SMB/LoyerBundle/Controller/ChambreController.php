@@ -35,30 +35,37 @@ class ChambreController extends Controller{
             //création de l'objet chambre
             $chambre = new Chambre();
             
-            //création du formulaire d'ajout d'un chambre
-            $form = $this->get('form.factory')->create(new ChambreType(),$chambre);
-            $form->handleRequest($request);
-            //on vérifie si des données ont été postées
-            if($request->getMethod() == "POST"){
-                //on teste si les données entrées sont valides
-                if($form->isValid()){
-                    $em = $this->getDoctrine()
-                               ->getManager();
-                    //on persiste l'objet chambre
-                    $em->persist($chambre);
-                    //on enregistre dans la base
-                    $em->flush();
-                    
-                    //on redirige vers la page d'affichage de la chambre
-                    return $this->redirect($this->generateUrl('smb_chambre_view',array(
-                                                                                    'id' => $chambre->getId()
-                                                                                    )
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                $requete = $request->request->get('requete');
+                if($requete == "affichage"){
+                    //création du formulaire d'ajout d'une chambre
+                    $form = $this->get('form.factory')->create(new ChambreType(),$chambre);
+                    return $this->render("SMBLoyerBundle:Chambre:add.html.twig",array(
+                        'form' => $form->createView()
                     ));
                 }
-                //les données saisies ne sont pas valides
+                else{
+                    if($requete == "ajout"){
+                        $numero = $request->request->get('numero_chambre');
+                        $chambre->setNumero($numero);
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $em->persist($chambre);
+                        $em->flush();                   
+
+                        //on envoie la liste des chambres
+                        $listChambres = Chambre::listChambres($this);
+
+                        return $this->render("SMBLoyerBundle:Chambre:index.html.twig",array(
+                            'listChambres' => $listChambres
+                        ));                        
+                    }
+                }
             }
-            //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Chambre:add.html.twig");
+            else{
+                throw new Exception("Pas de Requete envoyée!",1);
+            }
 	}
         
 	/**********************************************************************

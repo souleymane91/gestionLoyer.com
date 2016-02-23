@@ -35,30 +35,37 @@ class MoisController extends Controller{
             //création de l'objet mois
             $mois = new Mois();
             
-            //création du formulaire d'ajout d'un mois
-            $form = $this->get('form.factory')->create(new MoisType(),$mois);
-            $form->handleRequest($request);
-            //on vérifie si des données ont été postées
-            if($request->getMethod() == "POST"){
-                //on teste si les données entrées sont valides
-                if($form->isValid()){
-                    $em = $this->getDoctrine()
-                               ->getManager();
-                    //on persiste l'objet mois
-                    $em->persist($mois);
-                    //on enregistre dans la base
-                    $em->flush();
-                    
-                    //on redirige vers la page d'affichage du mois
-                    return $this->redirect($this->generateUrl('smb_mois_view',array(
-                                                                                    'id' => $mois->getId()
-                                                                                    )
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                $requete = $request->request->get('requete');
+                if($requete == "affichage"){
+                    //création du formulaire d'ajout d'un mois
+                    $form = $this->get('form.factory')->create(new MoisType(),$mois);
+                    return $this->render("SMBLoyerBundle:Mois:add.html.twig",array(
+                        'form' => $form->createView()
                     ));
                 }
-                //les données saisies ne sont pas valides
+                else{
+                    if($requete == "ajout"){
+                        $libelle = $request->request->get('mois');
+                        $mois->setLibelle($libelle);
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $em->persist($mois);
+                        $em->flush();                   
+
+                        //on envoie la liste des mois
+                        $listMois = Mois::listMois($this);
+
+                        return $this->render("SMBLoyerBundle:Mois:index.html.twig",array(
+                            'listMois' => $listMois
+                        ));                        
+                    }
+                }
             }
-            //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Mois:add.html.twig");
+            else{
+                throw new Exception("Pas de Requete envoyée!",1);
+            }
 	}
         
 	/****************************************************************************

@@ -1,32 +1,65 @@
 {# src\SMB\LoyerBundle\Resources\views\Chambre\index.html.twig #}
 
-
+<div class="chambre_affichage">
 <div class="block block_chambre col-sm-12">
     <div class="liste_chambre col-sm-10">
         <div class="titre_block">
             <h5 class="titre">Numéros de chambre disponibles</h5>
         </div>
-        <table class="table table-striped table-borded table-condensed">
-            <thead>
-                <tr>
-                    <th>Numéro</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for chambre in listChambres %}
-                    <tr style="font-size:15px">
-                        <td>{{ chambre.numero }}</td>   
-                        <td><input type="checkbox" name="{{chambre.id}}"/></td>
+        <div class="tableau">
+            <table class="table table-striped table-borded table-condensed">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for chambre in listChambres %}
+                        <tr style="font-size:15px">
+                            <td>{{ chambre.numero }}</td>   
+                            <td><input type="checkbox" name="{{chambre.id}}"/></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="boutons">
     <ul>
-        <li class="ajout_chambre"><button class="ajouter">Ajouter</button></li>
-        <li class="modification_chambre"><button class="modifier">Modifier</button></li>
-        <li class="suppression_chambre"><button class="supprimer">Supprimer</button></li>
+        <li><button class="ajout_chambre ajouter">Ajouter</button></li>
+        <li><button class="modification_chambre modifier">Modifier</button></li>
+        <li><button class="suppression_chambre supprimer">Supprimer</button></li>
     </ul>
 </div>
+</div>
+            
+<script type="text/javascript">
+    $(document).ready(function(){
+        /*******************************************************
+         * gestion du click sur le bouton d'ajout d'une chambre
+         *******************************************************/
+        $('.ajout_chambre').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+            //on envoie le type de requete à traiter au
+            //niveau du controller Chambre:add
+            var requete = "affichage";
+            var DATA='requete='+requete;
+            $.ajax({
+                type:"POST",
+                url:"{{ path('smb_chambre_add')}}",
+                data:DATA,
+                success: function(data){
+                    $('#contenu_parametre').append(data);
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                },
+                error: function(){
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                }
+            });
+        });
+    });
+</script>

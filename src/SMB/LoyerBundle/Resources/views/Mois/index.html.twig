@@ -1,34 +1,67 @@
 {# src\SMB\LoyerBundle\Resources\views\Mois\index.html.twig #}
 
-
+<div class="mois_affichage">
 <div class="block block_mois col-sm-12">
     <div class="liste_mois col-sm-10">
         <div class="titre_block">
             <h5 class="titre">Liste des mois</h5>
         </div>
-        <table class="table table-striped table-borded table-condensed">
-            <thead>
-                <tr>
-                    <th>Numéro</th>
-                    <th>Libellé</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mois in listMois %}
-                    <tr style="font-size:15px">
-                        <td>{{ mois.id }}</td>
-                        <td>{{ mois.libelle }}</td>                                 
-                        <td><input type="checkbox" name="{{mois.id}}"/></td>                                 
+        <div class="tableau">
+            <table class="table table-striped table-borded table-condensed">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Libellé</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for mois in listMois %}
+                        <tr style="font-size:15px">
+                            <td>{{ mois.id }}</td>
+                            <td>{{ mois.libelle }}</td>                                 
+                            <td><input type="checkbox" name="{{mois.id}}"/></td>                                 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="boutons">
     <ul>
-        <li class="ajout_mois"><button class="ajouter">Ajouter</button></li>
-        <li class="modification_mois"><button class="modifier">Modifier</button></li>
-        <li class="suppression_mois"><button class="supprimer">Supprimer</button></li>
+        <li><button class="ajout_mois ajouter">Ajouter</button></li>
+        <li><button class="modification_mois modifier">Modifier</button></li>
+        <li><button class="suppression_mois supprimer">Supprimer</button></li>
     </ul>
 </div>
+</div>
+            
+<script type="text/javascript">
+    $(document).ready(function(){
+        /*******************************************************
+         * gestion du click sur le bouton d'ajout d'un mois
+         *******************************************************/
+        $('.ajout_mois').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+            //on envoie le type de requete à traiter au
+            //niveau du controller Mois:add
+            var requete = "affichage";
+            var DATA='requete='+requete;
+            $.ajax({
+                type:"POST",
+                url:"{{ path('smb_mois_add')}}",
+                data:DATA,
+                success: function(data){
+                    $('#contenu_parametre').append(data);
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                },
+                error: function(){
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                }
+            });
+        });
+    });
+</script>
