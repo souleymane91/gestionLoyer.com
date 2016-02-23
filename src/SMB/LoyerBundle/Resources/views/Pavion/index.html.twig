@@ -20,7 +20,7 @@
                         <tr style="font-size:15px">
                             <td>{{ pavion.id }}</td>
                             <td>{{ pavion.libelle }}</td>  
-                            <td><input type="checkbox" name="{{pavion.id}}"/></td>
+                            <td><input type="checkbox" id="{{pavion.id}}"/></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -63,6 +63,67 @@
                     $('#loader').hide();
                 }
             });
+        });
+        
+        /*************************************************************
+         * gestion du click sur le bouton de modification d'un pavion
+         *************************************************************/
+        $('.modification_pavion').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+            //on recupere l'ensemble des case cochées
+            var nbre = 0; //le nombre de cases cochées
+            var id; //on met ici l'id du pavion correspondant à la case cochée
+            $("input[type='checkbox']:checked").each(function(){
+                nbre++; 
+                id = $(this).attr('id');
+                console.log("nombre: "+nbre);
+                console.log("id: "+id);
+            }); 
+            //si aucun élément n'a été selectionné
+            //on demande à choisir un élément à modifier
+            if(nbre === 0 ){
+                //on enlève l'image loader
+                $('#loader').hide();
+                alert("Veuillez choisir un élément à modifier!");
+            }
+            else{
+                //si plusieurs élément ont été selectionnés
+                //on envoie un message d'erreur
+                if(nbre > 1){
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                    alert("Vous ne pouvez pas modifier plusieurs éléments en même temps!");
+                }
+                else{ //un seul élément est choisi, on peut le modifier
+                    
+                    //on envoie le type de requete à traiter au
+                    //niveau du controller Pavion:add
+                    //ici on cherche à afficher le formulaire de modification
+                    var requete = "affichage";
+                    var DATA='requete='+requete;
+                    //variable url pour garder l'url avec la valeur de id
+                    var url = "{{ path('smb_pavion_edit',{'id':2})}}";
+                    //on remplace le 2 dans la chaine par notre valeur id
+                    url = url.replace("2",id);
+                    
+                    $.ajax({
+                        type:"POST",
+                        url:url,
+                        data:DATA,
+                        success: function(data){
+                            $('.pavion_ajout').remove();
+                            $('#contenu_parametre').append(data);
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        },
+                        error: function(){
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        }
+                    });
+                }
+            }
         });
     });
 </script>

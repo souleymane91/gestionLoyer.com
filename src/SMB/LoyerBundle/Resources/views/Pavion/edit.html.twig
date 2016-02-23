@@ -1,16 +1,36 @@
-{% extends '::base.html.twig' %}
+{# src\SMB\LoyerBundle\Resources\views\Pavion\edit.html.twig #}
 
-{% block body -%}
-    <h1>Pavion edit</h1>
+<div class="pavion_modification">
+<div class="block modifier_pavion col-sm-6">
+        {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
+        <form id="formulaire_modification">
+                <div class="titre_block">
+                    <h5 class="titre">Modifier le pavion </h5>
+                </div>
 
-    {{ form(edit_form) }}
+                {{ form_errors(form) }}
+                <div class="row">
+                        <div class="col-sm-10">
+                                {# personalisation du champ libelle #}
+                                <div class="row">
+                                <div class="form-group">
+                                        {{ form_label(form.libelle, "Nom du pavion: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_widget(form.libelle, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                                        <span class="nom_pavion_erreur"></span>
+                                        
+                                </div>
+                                </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('gestion-loyer_pavion') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+                        </div>
+
+
+                </div>
+
+      {#  {{ form_end(form) }}#}
+        </form>
+        <div class="boutons_add">
+            <button class="annuler_ajout_pavion">Annuler</button>
+            <button class="enregistrer_pavion">Enregistrer</button>
+        </div>
+</div>
+</div>

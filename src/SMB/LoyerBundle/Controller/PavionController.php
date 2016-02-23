@@ -75,36 +75,47 @@ class PavionController extends Controller{
 	
 	public function editAction($id,Request $request){
             
-            //on recupère le pavion correspondant à $id
+            //création de l'objet pavion
+            $pavion = new Pavion();
+            //on recupère l'objet pavion à editer
             $pavion = $this->getDoctrine()
-                             ->getManager()
-                             ->getRepository("SMBLoyerBundle:Pavion")
-                             ->find($id);
+                           ->getManager()
+                           ->getRepository("SMBLoyerBundle:Pavion")
+                           ->find($id);
             
-            //création du formulaire à partir de l'objet à modifier
-            $form = $this->get('form.factory')->create(new PavionType(),$pavion);
-            $form->handleRequest($request);
-            //on vérifie si des données ont été postées
-            if($request->getMethod() == "POST"){
-                //on teste si les données entrées sont valides
-                if($form->isValid()){
-                    $em = $this->getDoctrine()
-                               ->getManager();
-                    //on persiste l'objet pavion
-                    $em->persist($pavion);
-                    //on enregistre dans la base
-                    $em->flush();
-                    
-                    //on redirige vers la page d'affichage du pavion
-                    return $this->redirect($this->generateUrl('smb_pavion_view',array(
-                                                                                    'id' => $pavion->getId()
-                                                                                    )
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                //on recupère la le type de la requete
+                $requete = $request->request->get('requete');
+                //si on veut afficher le formulaire de modification
+                if($requete == "affichage"){
+                    //création du formulaire de modification d'un pavion
+                    $form = $this->get('form.factory')->create(new PavionType(),$pavion);
+                    return $this->render("SMBLoyerBundle:Pavion:edit.html.twig",array(
+                        'form' => $form->createView()
                     ));
                 }
-                //les données saisies ne sont pas valides
+                else{
+                    //si on veut modifier un pavion
+                    if($requete == "modification"){
+                        $nom_pavion = $request->request->get('nom_pavion');
+                        $pavion->setLibelle($nom_pavion);
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $em->flush();                   
+
+                        //on envoie la liste des pavions
+                        $listPavions = Pavion::listPavions($this);
+
+                        return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
+                            'listPavions' => $listPavions
+                        ));                        
+                    }
+                }
             }
-            //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Pavion:add.html.twig");
+            else{
+                throw new Exception("Pas de Requete envoyée!",1);
+            }
 	}
         
         /*********************************************************************
