@@ -20,7 +20,7 @@
                         <tr style="font-size:15px">
                             <td>{{ pavion.id }}</td>
                             <td>{{ pavion.libelle }}</td>  
-                            <td><input type="checkbox" id="{{pavion.id}}"/></td>
+                            <td><input type="checkbox" id="{{pavion.id}}" class="pavion"/></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -37,10 +37,13 @@
 </div>
 <div id="message_erreur" title="Message d'erreur">
 </div>
+<div id="confirmation" title="Message de confirmation">
+</div>
 </div>
                 
 <script type="text/javascript">
     $(document).ready(function(){
+            
         /****************************************************
          * gestion du click sur le bouton d'ajout d'un pavion
          ****************************************************/
@@ -58,9 +61,11 @@
                 success: function(data){
                     $('.pavion_ajout').remove();
                     $('.pavion_modification').remove();
-                    $('#contenu_parametre').append(data);
+                    $('#contenu_pavion').append(data);
+                    $('.pavion_ajout').dialog({ modal:true})
+                    
                     //on enlève l'image loader
-                    $('#loader').hide();
+                    $('#loader').hide();                    
                 },
                 error: function(){
                     //on enlève l'image loader
@@ -78,7 +83,7 @@
             //on recupere l'ensemble des case cochées
             var nbre = 0; //le nombre de cases cochées
             var id; //on met ici l'id du pavion correspondant à la case cochée
-            $("input[type='checkbox']:checked").each(function(){
+            $("input.pavion[type='checkbox']:checked").each(function(){
                 nbre++; 
                 id = $(this).attr('id');
             }); 
@@ -88,7 +93,7 @@
                 //on enlève l'image loader
                 $('#loader').hide();
                 $('#message_erreur').html("Veuillez choisir un élément à modifier!");
-                $('#message_erreur').dialog({modal:true,autopen:false});
+                $('#message_erreur').dialog({modal:true});
                 //alert("Veuillez choisir un élément à modifier!");
             }
             else{
@@ -98,7 +103,7 @@
                     //on enlève l'image loader
                     $('#loader').hide();
                     $('#message_erreur').html("Vous ne pouvez pas modifier plusieurs éléments en même temps!");
-                    $('#message_erreur').dialog({modal:true,autopen:false});
+                    $('#message_erreur').dialog({modal:true});
                 }
                 else{ //un seul élément est choisi, on peut le modifier
                     
@@ -119,7 +124,8 @@
                         success: function(data){
                             $('.pavion_ajout').remove();
                             $('.pavion_modification').remove();
-                            $('#contenu_parametre').append(data);
+                            $('#contenu_pavion').append(data);
+                            $('.pavion_modification').dialog({modal:true})
                             //on enlève l'image loader
                             $('#loader').hide();
                         },
@@ -131,5 +137,85 @@
                 }
             }
         });
+        
+        /*************************************************************
+         * gestion du click sur le bouton de suppression de pavions
+         *************************************************************/
+        $('.suppression_pavion').click(function(){
+            
+            //on recupère l'ensemble des lignes à supprimer
+            var nbre = 0;
+            var list = Array();
+            $("input.pavion[type='checkbox']:checked").each(function(){
+                list[nbre] = $(this).attr('id');
+                console.log(list[nbre]);
+                nbre++; 
+            });             
+            
+            //si aucun n'a été coché
+            if(nbre === 0){
+                //on enlève l'image loader
+                $('#loader').hide();
+                
+                $('#message_erreur').html("Veuillez choisir les pavions à supprimer!");
+                $('#message_erreur').dialog({ modal:true });
+            }
+            else{
+                $('#confirmation').html("Voulez vous vraiment supprimer la selection?");
+                $('#confirmation').dialog({
+                   modal:true,
+                   buttons:{
+                       "Non": function(){//on annule la suppression
+                           //on ferme la boite de dialogue
+                           $(this).dialog("close");
+                        },
+                        "Oui": function(){//la suppression est confirmer
+                            //on ferme la boite de dialogue
+                            $(this).dialog("close");
+                            
+                            //on charge l'image loader
+                            $('#loader').show();
+            
+                            var listPavions = JSON.stringify(list);
+                            var DATA = 'listPavions='+listPavions+'&nbre='+nbre;
+                            $.ajax({
+                                type:"POST",
+                                url:"{{path('smb_pavion_delete',{'id':1})}}",
+                                data:DATA,
+                                success: function(data){
+                                    $('.pavion_ajout').remove();
+                                    $('.pavion_modification').remove();
+                                    $('#contenu_pavion').html(data);
+                                    //on enlève l'image loader
+                                    $('#loader').hide();
+                                },
+                                error: function(){
+                                    //on enlève l'image loader
+                                    $('#loader').hide();
+                                } 
+                            });                            
+                        }
+                   }
+                });
+            }
+        });
+        
+        
+        /****************************************************** 
+         * ici on verifier si une variable erreur est envoyée
+         ******************************************************/
+        {% if erreur is defined %}
+            var existe;
+            {% if erreur == 1 %}
+                existe = true;
+            {%else%}
+                existe = false;
+            {% endif %}
+            //si le pavion à ajouter existe
+            if(existe){ //on cherche à ajouter un pavion qui existe déja(pas normal)
+                $('#message_erreur').html("Ce Pavion existe déja!");
+                $('#message_erreur').dialog({ modal:true});
+            }
+        {% endif %}
     });
 </script>

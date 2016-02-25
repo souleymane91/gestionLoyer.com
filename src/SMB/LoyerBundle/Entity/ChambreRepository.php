@@ -55,4 +55,38 @@ class ChambreRepository extends EntityRepository
                 ->setParameter('bol', FALSE);
        return $qb->getQuery()->getResult();
     }
+    
+    /*****************************************************
+     * fonction qui teste si une chambre existe déja ou pas
+     *****************************************************/
+    public function existe($numero){
+        $qb = $this->createQueryBuilder('c')
+                   ->where('c.numero = :num')
+                   ->setParameter('num', $numero);
+        if($qb->getQuery()->getResult() == NULL){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
+    /*********************************************************
+     * fonction qui permet de restaurer une chambre supprimée
+     * renvoie false si le nom à restaurer n'existe pas 
+     * et true sinon
+     *********************************************************/
+    public function restaurer($num){
+        $qb = $this->createQueryBuilder('c')
+                   ->update()
+                   ->set('c.supprime', 0)
+                   ->where('c.numero = :num')
+                   ->setParameter('num', $num);
+        
+        if($qb->getQuery()->getResult() == NULL){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }

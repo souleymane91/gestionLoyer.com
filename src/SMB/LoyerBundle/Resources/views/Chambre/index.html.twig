@@ -17,7 +17,7 @@
                     {% for chambre in listChambres %}
                         <tr style="font-size:15px">
                             <td>{{ chambre.numero }}</td>   
-                            <td><input type="checkbox" name="{{chambre.id}}"/></td>
+                            <td><input type="checkbox" id="{{chambre.id}}" class="chambre"/></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -31,6 +31,10 @@
         <li><button class="modification_chambre modifier">Modifier</button></li>
         <li><button class="suppression_chambre supprimer">Supprimer</button></li>
     </ul>
+</div>
+<div id="message_erreur" title="Message d'erreur!">
+</div>
+<div id="confirmation" title="Message de confirmation!">
 </div>
 </div>
             
@@ -51,7 +55,9 @@
                 url:"{{ path('smb_chambre_add')}}",
                 data:DATA,
                 success: function(data){
-                    $('#contenu_parametre').append(data);
+                    $('#contenu_chambre').append(data);
+                    $('.chambre_ajout').dialog({modal:true})
+                    
                     //on enlève l'image loader
                     $('#loader').hide();
                 },
@@ -61,5 +67,153 @@
                 }
             });
         });
+        
+        /**************************************************************
+         * gestion du click sur le bouton de modification d'une chambre
+         **************************************************************/
+        $('.modification_chambre').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+            //on recupere l'ensemble des case cochées
+            var nbre = 0; //le nombre de cases cochées
+            var id; //on met ici l'id du chambre correspondant à la case cochée
+            $("input.chambre[type='checkbox']:checked").each(function(){
+                nbre++; 
+                id = $(this).attr('id');
+                console.log(id);
+            }); 
+            //si aucun élément n'a été selectionné
+            //on demande à choisir un élément à modifier
+            if(nbre === 0 ){
+                //on enlève l'image loader
+                $('#loader').hide();
+                $('#message_erreur').html("Veuillez choisir un élément à modifier!");
+                $('#message_erreur').dialog({modal:true});
+                //alert("Veuillez choisir un élément à modifier!");
+            }
+            else{
+                //si plusieurs élément ont été selectionnés
+                //on envoie un message d'erreur
+                if(nbre > 1){
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                    $('#message_erreur').html("Vous ne pouvez pas modifier plusieurs éléments en même temps!");
+                    $('#message_erreur').dialog({modal:true});
+                }
+                else{ //un seul élément est choisi, on peut le modifier
+                    
+                    //on envoie le type de requete à traiter au
+                    //niveau du controller Chambre:add
+                    //ici on cherche à afficher le formulaire de modification
+                    var requete = "affichage";
+                    var DATA='requete='+requete;
+                    //variable url pour garder l'url avec la valeur de id
+                    var url = "{{ path('smb_chambre_edit',{'id':2})}}";
+                    //on remplace le 2 dans la chaine par notre valeur id
+                    url = url.replace("2",id);
+                    
+                    $.ajax({
+                        type:"POST",
+                        url:url,
+                        data:DATA,
+                        success: function(data){
+                            $('.chambre_ajout').remove();
+                            $('.chambre_modification').remove();
+                            $('#contenu_chambre').append(data);
+                            $('.chambre_modification').dialog({
+                                modal:true
+                            });
+                            
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        },
+                        error: function(){
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        }
+                    });
+                }
+            }
+        });
+        
+        /*************************************************************
+         * gestion du click sur le bouton de suppression de chambres
+         *************************************************************/
+        $('.suppression_chambre').click(function(){
+            
+            //on recupère l'ensemble des lignes à supprimer
+            var nbre = 0;
+            var list = Array();
+            $("input.chambre[type='checkbox']:checked").each(function(){
+                list[nbre] = $(this).attr('id');
+                nbre++; 
+            });             
+            
+            //si aucun n'a été coché
+            if(nbre === 0){
+                //on enlève l'image loader
+                $('#loader').hide();
+                
+                $('#message_erreur').html("Veuillez choisir les chambres à supprimer!");
+                $('#message_erreur').dialog({ modal:true });
+            }
+            else{
+                $('#confirmation').html("Voulez vous vraiment supprimer la selection?");
+                $('#confirmation').dialog({
+                   modal:true,
+                   buttons:{
+                       "Non": function(){//on annule la suppression
+                           //on ferme la boite de dialogue
+                           $(this).dialog("close");
+                        },
+                        "Oui": function(){//la suppression est confirmer
+                            //on ferme la boite de dialogue
+                            $(this).dialog("close");
+                            
+                            //on charge l'image loader
+                            $('#loader').show();
+            
+                            var listChambres = JSON.stringify(list);
+                            var DATA = 'listChambres='+listChambres+'&nbre='+nbre;
+                            $.ajax({
+                                type:"POST",
+                                url:"{{path('smb_chambre_delete',{'id':1})}}",
+                                data:DATA,
+                                success: function(data){
+                                    $('.chambre_ajout').remove();
+                                    $('.chambre_modification').remove();
+                                    $('#contenu_chambre').html(data);
+                                    
+                                    //on enlève l'image loader
+                                    $('#loader').hide();
+                                },
+                                error: function(){
+                                    //on enlève l'image loader
+                                    $('#loader').hide();
+                                } 
+                            });                            
+                        }
+                   }
+                });
+            }
+        });
+        
+        
+        /****************************************************** 
+         * ici on verifier si une variable erreur est envoyée
+         ******************************************************/
+        {% if erreur is defined %}
+            var existe;
+            {% if erreur == 1 %}
+                existe = true;
+            {%else%}
+                existe = false;
+            {% endif %}
+            //si la chambre à ajouter existe
+            if(existe){ //on cherche à ajouter une chambre qui existe déja(pas normal)
+                $('#message_erreur').html("Ce numéro de chambre existe déja!");
+                $('#message_erreur').dialog({ modal:true});
+            }
+        {% endif %}
     });
 </script>

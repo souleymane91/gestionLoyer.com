@@ -51,7 +51,73 @@ class ChambreController extends Controller{
                         $chambre->setNumero($numero);
                         $em = $this->getDoctrine()
                                    ->getManager();
-                        $em->persist($chambre);
+                        //vérifions si ce chambre n'existe pas dans la base de données 
+                        if(!$chambre->existe($this)){
+                            $existe = false;
+                            $em->persist($chambre);
+                            $em->flush();
+                        }
+                        else{//cette chambre est dans la base de données
+                            //vérifions si c'est supprimé ou pas
+                            if($chambre->estSupprime($this)){
+                                //on le restaure
+                                $chambre->restaurer($this);
+                                $existe = false;
+                            }
+                            else{//la chambre existe et n'a pas été supprimé
+                                $existe = true;                                
+                            }
+                        }
+
+                        //on envoie la liste des chambres
+                        $listChambres = Chambre::listChambres($this);
+
+                        return $this->render("SMBLoyerBundle:Chambre:index.html.twig",array(
+                            'listChambres' => $listChambres,
+                            'erreur' => $existe
+                        ));                        
+                    }
+                }
+            }
+            else{
+                throw new Exception("Pas de Requete envoyée!",1);
+            }
+	}
+        
+	/**********************************************************************
+	 l'action edit qui permet de modifier les informations d'une chambre
+	 **********************************************************************/
+	
+	public function editAction($id,Request $request){
+            
+            //création de l'objet chambre
+            $chambre = new Chambre();
+            //on recupère l'objet chambre à editer
+            $chambre = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository("SMBLoyerBundle:Chambre")
+                           ->find($id);
+            
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                //on recupère la le type de la requete
+                $requete = $request->request->get('requete');
+                //si on veut afficher le formulaire de modification
+                if($requete == "affichage"){
+                    //création du formulaire de modification d'un chambre
+                    $form = $this->get('form.factory')->create(new ChambreType(),$chambre);                    
+                    return $this->render("SMBLoyerBundle:Chambre:edit.html.twig",array(
+                        'id' => $id,
+                        'form' => $form->createView()
+                    ));
+                }
+                else{
+                    //si on veut modifier un chambre
+                    if($requete == "modification"){
+                        $numero = $request->request->get('numero');
+                        $chambre->setNumero($numero);
+                        $em = $this->getDoctrine()
+                                   ->getManager();
                         $em->flush();                   
 
                         //on envoie la liste des chambres
@@ -68,56 +134,33 @@ class ChambreController extends Controller{
             }
 	}
         
-	/**********************************************************************
-	 l'action edit qui permet de modifier les informations d'une chambre
-	 **********************************************************************/
-	
-	public function editAction($id,Request $request){
-            
-            //on recupère la chambre correspondant à $id
-            $chambre = $this->getDoctrine()
-                             ->getManager()
-                             ->getRepository("SMBLoyerBundle:Chambre")
-                             ->find($id);
-            
-            //création du formulaire à partir de l'objet à modifier
-            $form = $this->get('form.factory')->create(new ChambreType(),$chambre);
-            $form->handleRequest($request);
-            //on vérifie si des données ont été postées
-            if($request->getMethod() == "POST"){
-                //on teste si les données entrées sont valides
-                if($form->isValid()){
-                    $em = $this->getDoctrine()
-                               ->getManager();
-                    //on persiste l'objet chambre
-                    $em->persist($chambre);
-                    //on enregistre dans la base
-                    $em->flush();
-                    
-                    //on redirige vers la page d'affichage de la chambre
-                    return $this->redirect($this->generateUrl('smb_chambre_view',array(
-                                                                                    'id' => $chambre->getId()
-                                                                                    )
-                    ));
-                }
-                //les données saisies ne sont pas valides
-            }
-            //Pas de données postées, on affiche le formulaire d'ajout
-            return $this->render("SMBLoyerBundle:Chambre:add.html.twig");
-	}
-        
         /*********************************************************************
          * l'action delete qui permet de supprimer une chambre
          *********************************************************************/
         public function deleteAction($id,Request $request){
             
-            $this->getDoctrine()
-                 ->getManager()
-                 ->getRepository("SMBLoyerBundle:Chambre")
-                 ->supprimer_chambre($id);
-            
-            //on redirige vers la page d'affichage de toutes les chambres
-            $this->redirect($this->generateUrl("smb_chambre_home"));
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                //on recupère la liste des chambres à supprimer
+                $listChambres = json_decode($request->request->get('listChambres'));
+                $nbre = $request->request->get('nbre');
+                
+                for ($i = 0; $i<$nbre; $i++){
+                    $ident = $listChambres[$i];
+                    $this->getDoctrine()
+                         ->getManager()
+                         ->getRepository("SMBLoyerBundle:Chambre")
+                         ->supprimer_chambre($ident);
+                }
+                //on retourne la liste de tous les chambres
+                $listChambre = Chambre::listChambres($this);
+                return $this->render("SMBLoyerBundle:Chambre:index.html.twig",array(
+                    'listChambres' => $listChambre
+                ));
+            }
+            else{
+                throw new \Exception("Pas de requête!",1);
+            }
         }
 
 }

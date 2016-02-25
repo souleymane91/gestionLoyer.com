@@ -52,15 +52,30 @@ class PavionController extends Controller{
                         $pavion->setLibelle($nom_pavion);
                         $em = $this->getDoctrine()
                                    ->getManager();
-                        $em->persist($pavion);
-                        $em->flush();                   
-
+                        //vérifions si ce pavion n'existe pas dans la base de données 
+                        if(!$pavion->existe($this)){
+                            $existe = false;
+                            $em->persist($pavion);
+                            $em->flush();     
+                            
+                        }
+                        else{//ce pavion est dans la base de données
+                            //vérifions si c'est supprimé ou pas
+                            if($pavion->estSupprime($this)){
+                                //on le restaure
+                                $pavion->restaurer($this);
+                                $existe = false;
+                            }
+                            else{//le pavion existe et n'a pas été supprimé
+                                $existe = true;                                
+                            }
+                        }
                         //on envoie la liste des pavions
                         $listPavions = Pavion::listPavions($this);
-
                         return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
-                            'listPavions' => $listPavions
-                        ));                        
+                            'listPavions' => $listPavions,
+                            'erreur' => $existe
+                        ));                      
                     }
                 }
             }
@@ -85,13 +100,14 @@ class PavionController extends Controller{
             
             //si nous avons une requête ajax, elle sera traité ici
             if($request->isXmlHttpRequest()){
-                //on recupère la le type de la requete
+                //on recupère le type de la requete
                 $requete = $request->request->get('requete');
                 //si on veut afficher le formulaire de modification
                 if($requete == "affichage"){
                     //création du formulaire de modification d'un pavion
                     $form = $this->get('form.factory')->create(new PavionType(),$pavion);
                     return $this->render("SMBLoyerBundle:Pavion:edit.html.twig",array(
+                        'id' => $id,
                         'form' => $form->createView()
                     ));
                 }
@@ -100,6 +116,7 @@ class PavionController extends Controller{
                     if($requete == "modification"){
                         $nom_pavion = $request->request->get('nom_pavion');
                         $pavion->setLibelle($nom_pavion);
+                                                
                         $em = $this->getDoctrine()
                                    ->getManager();
                         $em->flush();                   
@@ -122,14 +139,28 @@ class PavionController extends Controller{
          * l'action delete qui permet de supprimer un pavion
          *********************************************************************/
         public function deleteAction($id,Request $request){
-            
-            $this->getDoctrine()
-                 ->getManager()
-                 ->getRepository("SMBLoyerBundle:Pavion")
-                 ->supprimer_pavion($id);
-            
-            //on redirige vers la page d'affichage de tous les pavions
-            $this->redirect($this->generateUrl("smb_pavion_home"));
+            //si nous avons une requête ajax, elle sera traité ici
+            if($request->isXmlHttpRequest()){
+                //on recupère la liste des pavions à supprimer
+                $listPavions = json_decode($request->request->get('listPavions'));
+                $nbre = $request->request->get('nbre');
+                
+                for ($i = 0; $i<$nbre; $i++){
+                    $ident = $listPavions[$i];
+                    $this->getDoctrine()
+                         ->getManager()
+                         ->getRepository("SMBLoyerBundle:Pavion")
+                         ->supprimer_pavion($ident);
+                }
+                //on retourne la liste de tous les pavions
+                $listPavion = Pavion::listPavions($this);
+                return $this->render("SMBLoyerBundle:Pavion:index.html.twig",array(
+                    'listPavions' => $listPavion
+                ));
+            }
+            else{
+                throw new \Exception("Pas de requête!",1);
+            }
         }
 
 }

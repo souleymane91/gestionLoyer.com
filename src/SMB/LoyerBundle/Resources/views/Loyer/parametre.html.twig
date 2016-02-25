@@ -8,17 +8,23 @@
 
 {% block smbloyer_body %}
     <div id="parametre">
-        <div class="menu_parametre">
+        {#<div class="menu_parametre">
             <ul>
                 <li id="pavion" class="menu menu_pavion active"><a href="#">Pavions</a></li>
                 <li id="chambre" class="menu menu_chambre"><a href="#">Chambres</a></li>
                 <li id="mois" class="menu menu_mois"><a href="#">Mois</a></li>
                 <li id="restauration" class="menu menu_restauration"><a href="#">Restaurer</a></li>
             </ul>
-        </div>
+        </div>#}
         <div id="contenu_parametre" class="liste pavion">
             {# au premier chargement le contenu de la page est la liste des pavions #}
-            {{ render(controller('SMBLoyerBundle:Pavion:index')) }}
+            <div id="contenu_pavion">
+                {{ render(controller('SMBLoyerBundle:Pavion:index')) }}
+            </div>
+            
+            <div id="contenu_chambre">
+                {{ render(controller('SMBLoyerBundle:Chambre:index')) }}
+            </div>
         </div>
 
     </div>
@@ -35,10 +41,7 @@
              * la liste des pavions sera affichée
              **************************************/
             $('#pavion').click(function(){
-                //le menu pavion est actif
-                $('.menu').removeClass('active');
-                $(this).addClass('active');
-                
+                                
                 //chargement de l'image loader
                 $('#loader').show();
                 var DATA="";
@@ -50,6 +53,11 @@
                         $('#contenu_parametre').html(data);
                         //on enlève l'image loader
                         $('#loader').hide();
+                        
+                        //le menu pavion est actif
+                        $('.menu').removeClass('active');
+                        $('#pavion').addClass('active');
+
                     },
                     error: function(){
                         //on enlève l'image loader
@@ -64,9 +72,6 @@
              * la liste des chambres sera affichée
              **************************************/
             $('#chambre').click(function(){
-                //le menu chambre est actif
-                $('.menu').removeClass('active');
-                $(this).addClass('active');
                 
                 //chargement de l'image loader
                 $('#loader').show();
@@ -79,6 +84,11 @@
                         $('#contenu_parametre').html(data);
                         //on enlève l'image loader
                         $('#loader').hide();
+                        
+                        //le menu chambre est actif
+                        $('.menu').removeClass('active');
+                        $('#chambre').addClass('active');
+                
                     },
                     error: function(){
                         //on enlève l'image loader
@@ -93,9 +103,6 @@
              * la liste des mois sera affichée
              **************************************/
             $('#mois').click(function(){
-                //le menu mois est actif
-                $('.menu').removeClass('active');
-                $(this).addClass('active');
                 
                 //chargement de l'image loader
                 $('#loader').show();
@@ -108,6 +115,11 @@
                         $('#contenu_parametre').html(data);
                         //on enlève l'image loader
                         $('#loader').hide();
+                        
+                        //le menu mois est actif
+                        $('.menu').removeClass('active');
+                        $('#mois').addClass('active');
+                
                     },
                     error: function(){
                         //on enlève l'image loader

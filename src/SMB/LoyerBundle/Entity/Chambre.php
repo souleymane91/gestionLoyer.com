@@ -153,4 +153,40 @@ class Chambre
                             ->listChambres();
         return $listChambres;
     }
+    
+        
+    /***************************************************
+     * fonction qui vérifie si la chambre existe ou pas
+     ***************************************************/
+    public function existe(\SMB\LoyerBundle\Controller\ChambreController $cont){
+        $existe = $cont->getDoctrine()
+             ->getManager()
+             ->getRepository("SMBLoyerBundle:Chambre")
+             ->existe($this->numero);
+        
+            return $existe;
+    }
+    /******************************************************
+     * fonction vérifie si une chambre est supprimée ou pas
+     ******************************************************/
+    public function estSupprime(\SMB\LoyerBundle\Controller\ChambreController $cont){
+        $resultat = $cont->getDoctrine()
+                         ->getManager()
+                         ->getRepository("SMBLoyerBundle:Chambre")
+                         ->estSupprime($this->numero);
+        
+        return $resultat;
+    }
+    /*********************************************************
+     * fonction qui permet de restaurer une chambre supprimée
+     * renvoie true si la chambre à restaurer existe
+     * et false sinon
+     *********************************************************/
+    public function restaurer(\SMB\LoyerBundle\Controller\ChambreController $cont){
+        $existe = $cont->getDoctrine()
+                       ->getManager()
+                       ->getRepository("SMBLoyerBundle:Chambre")
+                       ->restaurer($this->numero);
+        return $existe;
+    }
 }

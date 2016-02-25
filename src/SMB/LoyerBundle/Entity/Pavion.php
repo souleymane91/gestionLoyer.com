@@ -32,7 +32,7 @@ class Pavion
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=255)
+     * @ORM\Column(name="libelle", type="string", length=255, unique = true)
      */
     private $libelle;
 
@@ -152,5 +152,40 @@ class Pavion
                             ->getRepository("SMBLoyerBundle:Pavion")
                             ->listPavions();
         return $listPavions;
+    }
+    
+    /**************************************************
+     * fonction qui vérifie si le pavion existe ou pas
+     **************************************************/
+    public function existe(\SMB\LoyerBundle\Controller\PavionController $cont){
+        $existe = $cont->getDoctrine()
+             ->getManager()
+             ->getRepository("SMBLoyerBundle:Pavion")
+             ->existe($this->libelle);
+        
+            return $existe;
+    }
+    /****************************************************
+     * fonction vérifie si un pavion est supprimé ou pas
+     ****************************************************/
+    public function estSupprime(\SMB\LoyerBundle\Controller\PavionController $cont){
+        $resultat = $cont->getDoctrine()
+                         ->getManager()
+                         ->getRepository("SMBLoyerBundle:Pavion")
+                         ->estSupprime($this->libelle);
+        
+        return $resultat;
+    }
+    /******************************************************
+     * fonction qui permet de restaurer un pavion supprimé
+     * renvoie true si le pavion à restaurer existe
+     * et false sinon
+     ******************************************************/
+    public function restaurer(\SMB\LoyerBundle\Controller\PavionController $cont){
+        $existe = $cont->getDoctrine()
+                       ->getManager()
+                       ->getRepository("SMBLoyerBundle:Pavion")
+                       ->restaurer($this->libelle);
+        return $existe;
     }
 }

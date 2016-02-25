@@ -1,12 +1,12 @@
 {# src\SMB\LoyerBundle\Resources\views\Pavion\edit.html.twig #}
 
-<div class="pavion_modification">
+<div class="pavion_modification" title="Modifier le pavion">
 <div class="block modifier_pavion col-sm-6">
         {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
         <form id="formulaire_modification">
-                <div class="titre_block">
+                {#<div class="titre_block">
                     <h5 class="titre">Modifier le pavion </h5>
-                </div>
+                </div>#}
 
                 {{ form_errors(form) }}
                 <div class="row">
@@ -34,3 +34,89 @@
         </div>
 </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        /*******************************************
+         * fonction qui permet de vérifier si un
+         * nom de pavion est valide
+         *******************************************/
+        function estValide(nom){
+            //le nom de pavion ne doit commencer 
+            //par au minimum une lettre
+            if(/^[a-zA-Z]{1,}[0-9a-zA-Z]{1,}$/i.test(nom)){
+                return true;                
+            }else{
+                return false;                
+            }
+        }
+        
+        /***************************************************
+         * traitement du click sur le bouton d'annulagion 
+         * de l'ajout d'un pavion
+         ***************************************************/
+        $('.annuler_ajout_pavion').click(function(){
+           $('.pavion_modification').remove(); 
+        });
+
+        /**************************************************
+         * Traitement du click sur le bouton d'ajout d'un 
+         * nouveau pavion 
+         **************************************************/
+        $('.enregistrer_pavion').click(function(){
+            
+            //on charge l'image loader
+            $('#loader').show();
+            //on envoie le type de la requete
+            var requete = "modification";
+            var nom_pavion = $('#smb_loyerbundle_pavion_libelle').val();
+            var DATA = 'nom_pavion='+nom_pavion+"&requete="+requete;
+            
+            //si le champ de nom ne peut pas être vide
+            if(nom_pavion === ""){
+                //on enlève l'image loader
+                 $('#loader').hide();
+                //on met un message d'erreur
+                $('.nom_pavion_erreur').html("Renseignez le nom du pavion");
+                //on enlève l'image loader
+                $('#loader').hide();
+            }else{
+                //le champ doit être valide
+                if(!estValide(nom_pavion)){
+                    //on met un message d'erreur
+                    $('.nom_pavion_erreur').html("Donnez un nom valide");
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                }
+                else{
+                    //on enlève la boite de dialogue
+                    $('.pavion_modification').dialog("close");
+            
+                    //le nom est valide on l'envoie dans la base
+                    //aucune erreur n'est affichée
+                    $('.nom_pavion_erreur').html("");
+                    
+                    //variable url pour garder l'url avec la valeur de id
+                    var url = "{{ path('smb_pavion_edit',{'id':2})}}";
+                    //on remplace le 2 dans la chaine par notre valeur id
+                    var id = {{id}};
+                    url = url.replace("2",id);
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: DATA,
+                        success: function(data){
+                            $('#contenu_pavion').html(data);
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        },
+                        error: function(resultat,statut,error){
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        }
+                    });                
+                }
+            }            
+        });
+    });
+</script>

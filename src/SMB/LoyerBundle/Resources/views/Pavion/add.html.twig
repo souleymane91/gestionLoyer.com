@@ -1,12 +1,12 @@
 {# src\SMB\LoyerBundle\Resources\views\Pavion\add.html.twig #}
 
-<div class="pavion_ajout">
+<div class="pavion_ajout" title="Nouveau pavion">
 <div class="block ajouter_pavion col-sm-6">
         {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
         <form id="formulaire_ajout">
-                <div class="titre_block">
+                {#<div class="titre_block">
                     <h5 class="titre">Nouveau pavion </h5>
-                </div>
+                </div>#}
 
                 {{ form_errors(form) }}
                 <div class="row">
@@ -56,7 +56,7 @@
          * de l'ajout d'un pavion
          ***************************************************/
         $('button.annuler_ajout_pavion').click(function(){
-           $('.pavion_ajout').html(""); 
+           $('.pavion_ajout').remove(); 
         });
 
         /**************************************************
@@ -64,6 +64,7 @@
          * nouveau pavion 
          **************************************************/
         $('.enregistrer_pavion').click(function(){
+            
             //on charge l'image loader
             $('#loader').show();
             //on envoie le type de la requete
@@ -90,6 +91,9 @@
                     $('#loader').hide();
                 }
                 else{
+                    //on enlève la boite de dialogue
+                    $('.pavion_ajout').dialog("close");
+            
                     //le nom est valide on l'envoie dans la base
                     //aucune erreur n'est affichée
                     $('.nom_pavion_erreur').html("");
@@ -98,7 +102,7 @@
                         url: "{{ path('smb_pavion_add') }}",
                         data: DATA,
                         success: function(data){
-                            $('#contenu_parametre').html(data);
+                            $('#contenu_pavion').html(data);
                             //on enlève l'image loader
                             $('#loader').hide();
                         },

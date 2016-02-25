@@ -1,16 +1,122 @@
-{% extends '::base.html.twig' %}
+{# src\SMB\LoyerBundle\Resources\views\Chambre\edit.html.twig #}
 
-{% block body -%}
-    <h1>Chambre edit</h1>
+<div class="chambre_modification" title="Modifier le numéro">
+<div class="block modification_chambre col-sm-6">
+        {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
+        <form id="formulaire_ajout">
+                {#<div class="titre_block">
+                    <h5 class="titre">Modifier le numéro </h5>
+                </div>#}
 
-    {{ form(edit_form) }}
+                {{ form_errors(form) }}
+                <div class="row">
+                        <div class="col-sm-10">
+                                {# personalisation du champ numero #}
+                                <div class="row">
+                                <div class="form-group">
+                                        {{ form_label(form.numero, "Numéro de chambre: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_widget(form.numero, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                                        <span class="nom_chambre_erreur"></span>
+                                        
+                                </div>
+                                </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('chambre') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+                        </div>
+
+
+                </div>
+
+      {#  {{ form_end(form) }}#}
+        </form>
+        <div class="boutons_add">
+            <button class="annuler_ajout_chambre">Annuler</button>
+            <button class="enregistrer_chambre">Enregistrer</button>
+        </div>
+</div>
+</div>
+
+        
+<script type="text/javascript">
+    $(document).ready(function(){
+        /*******************************************
+         * fonction qui permet de vérifier si un
+         * numéro de chambre est valide
+         *******************************************/
+        function estValide(numero){
+            //le nom de pavion ne doit commencer 
+            //par au minimum une lettre
+            if(/^[1-9][0-9]{0,4}$/i.test(numero)){
+                return true;                
+            }else{
+                return false;                
+            }
+        }
+        
+        /***************************************************
+         * traitement du click sur le bouton d'annulation 
+         * de l'ajout d'un numéro de chambre
+         ***************************************************/
+        $('button.annuler_ajout_chambre').click(function(){
+           $('.chambre_modification').remove(); 
+        });
+
+        /**************************************************
+         * Traitement du click sur le bouton d'ajout d'un 
+         * numéro de chambre 
+         **************************************************/
+        $('.enregistrer_chambre').click(function(){
+            
+            //on charge l'image loader
+            $('#loader').show();
+            //on envoie le type de la requete
+            var requete = "modification";
+            var numero_chambre = $('#smb_loyerbundle_chambre_numero').val();
+            var DATA = 'numero='+numero_chambre+"&requete="+requete;
+            
+            //le champ de numero ne peut pas être vide
+            if(numero_chambre === ""){
+                //on enlève l'image loader
+                 $('#loader').hide();
+                //on met un message d'erreur
+                $('.nom_chambre_erreur').html("Veuillez renseignez un numéro");
+                //on enlève l'image loader
+                $('#loader').hide();
+            }else{
+                //le champ doit être valide
+                if(!estValide(numero_chambre)){
+                    //on met un message d'erreur
+                    $('.nom_chambre_erreur').html("Donnez un numero valide");
+                    //on enlève l'image loader
+                    $('#loader').hide();
+                }
+                else{
+                    //on enlève la boite de dialogue
+                    $('.chambre_modification').dialog("close");
+            
+                    //le numero est valide on l'envoie dans la base
+                    //aucune erreur n'est affichée
+                    $('.nom_chambre_erreur').html("");
+                    
+                    //variable url pour garder l'url avec la valeur de id
+                    var url = "{{ path('smb_chambre_edit',{'id':2})}}";
+                    //on remplace le 2 dans la chaine par notre valeur id
+                    var id = {{id}};
+                    url = url.replace("2",id);
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: DATA,
+                        success: function(data){
+                            $('#contenu_chambre').html(data);
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        },
+                        error: function(resultat,statut,error){
+                            //on enlève l'image loader
+                            $('#loader').hide();
+                        }
+                    });                
+                }
+            }            
+        });
+    });

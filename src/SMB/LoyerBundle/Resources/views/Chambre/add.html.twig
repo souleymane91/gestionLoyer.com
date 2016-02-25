@@ -1,12 +1,12 @@
 {# src\SMB\LoyerBundle\Resources\views\Chambre\add.html.twig #}
 
-<div class="chambre_ajout">
+<div class="chambre_ajout" title="Nouveau numéro">
 <div class="block ajouter_chambre col-sm-6">
         {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
         <form id="formulaire_ajout">
-                <div class="titre_block">
+                {#<div class="titre_block">
                     <h5 class="titre">Nouveau numéro </h5>
-                </div>
+                </div>#}
 
                 {{ form_errors(form) }}
                 <div class="row">
@@ -44,7 +44,7 @@
         function estValide(numero){
             //le nom de pavion ne doit commencer 
             //par au minimum une lettre
-            if(/^[1-9][0-9]{1,4}$/i.test(numero)){
+            if(/^[1-9][0-9]{0,4}$/i.test(numero)){
                 return true;                
             }else{
                 return false;                
@@ -56,7 +56,7 @@
          * de l'ajout d'un numéro de chambre
          ***************************************************/
         $('button.annuler_ajout_chambre').click(function(){
-           $('.chambre_ajout').html(""); 
+           $('.chambre_ajout').remove(); 
         });
 
         /**************************************************
@@ -64,6 +64,7 @@
          * numéro de chambre 
          **************************************************/
         $('.enregistrer_chambre').click(function(){
+            
             //on charge l'image loader
             $('#loader').show();
             //on envoie le type de la requete
@@ -88,6 +89,9 @@
                     $('#loader').hide();
                 }
                 else{
+                    //on enlève la boite de dialogue
+                    $('.chambre_ajout').dialog("close");
+            
                     //le numero est valide on l'envoie dans la base
                     //aucune erreur n'est affichée
                     $('.nom_chambre_erreur').html("");
@@ -96,7 +100,7 @@
                         url: "{{ path('smb_chambre_add') }}",
                         data: DATA,
                         success: function(data){
-                            $('#contenu_parametre').html(data);
+                            $('#contenu_chambre').html(data);
                             //on enlève l'image loader
                             $('#loader').hide();
                         },

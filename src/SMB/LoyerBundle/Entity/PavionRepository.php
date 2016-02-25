@@ -30,15 +30,15 @@ class PavionRepository extends EntityRepository
     * fonction qui vérifie si un pavion est supprimé ou pas
     * Renvoie true si le pavion est supprimé et false sinon
     **************************************************************/
-    public function estSupprime($id){
+    public function estSupprime($nom){
         $qb = $this->createQueryBuilder('p')
-                   ->where('p.id = :id')
-                   ->setParameter('id',$id)
+                   ->where('p.id = :nom')
+                   ->setParameter('nom',$nom)
                    ->andWhere('p.supprime = :bol')
                    ->setParameter('bol', TRUE)
                    ->getQuery();
-        $result = $qb->getOneOrNullResult();
-        if(!$result){
+        $result = $qb->getResult();
+        if($result = NULL){
             return FALSE;
         }
         else{
@@ -55,4 +55,37 @@ class PavionRepository extends EntityRepository
                 ->setParameter('bol', FALSE);
        return $qb->getQuery()->getResult();
     }    
+    /*****************************************************
+     * fonction qui teste si un pavion existe déja ou pas
+     *****************************************************/
+    public function existe($nom){
+        $qb = $this->createQueryBuilder('p')
+                   ->where('p.libelle = :nom')
+                   ->setParameter('nom', $nom);
+        if($qb->getQuery()->getResult() == NULL){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
+    /*********************************************************
+     * fonction qui permet de restaurer un pavion supprimé
+     * renvoie false si le nom à restaurer n'existe pas 
+     * et true sinon
+     *********************************************************/
+    public function restaurer($nom){
+        $qb = $this->createQueryBuilder('p')
+                   ->update()
+                   ->set('p.supprime', 0)
+                   ->where('p.libelle = :nom')
+                   ->setParameter('nom', $nom);
+        
+        if($qb->getQuery()->getResult() == NULL){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
