@@ -18,14 +18,14 @@ media="all" /> -->
 </head>
 
 <body>
-  <div class="contenant" >
+  <div class="contenant_admin" >
     <div class="row">
       <div id="header">
-        <div class="logo"></div>
         <div class="titre">
-          <h1>Gestion du loyer</h1>
-          
+          <h1>Connexion Gestion du loyer</h1>          
         </div> 
+        <div class="authentification">
+        </div>
       </div>
     </div>
 
@@ -35,17 +35,14 @@ media="all" /> -->
         {% endblock %}
       </div>
     </div>
-
-    <hr>
-
+{#
     <footer>
-      <p>MBAYE Souleymane © {{ 'now'|date('Y') }}.</p>
       {% block javascripts %}
         {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
-        <script src="{{asset('bundles/bootstrap/js/jquery-2.1.1.min.js') }}"></script>
+        {#<script src="{{asset('bundles/bootstrap/js/jquery-2.1.1.min.js') }}"></script>
         <script src="{{asset('bundles/bootstrap/js/bootstrap.js') }}"></script>
       {% endblock %}
-    </footer>
+    </footer>#}
   </div>
 
 
