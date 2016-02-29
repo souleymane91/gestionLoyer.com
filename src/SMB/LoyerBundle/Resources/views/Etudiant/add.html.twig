@@ -1,77 +1,66 @@
 {# src\SMB\LoyerBundle\Resources\views\Loyer\addEtudiant.html.twig #}
 
-{% extends "SMBLoyerBundle::layout.html.twig" %}
-
-{% block title %}
-	Ajout d'un étudiant - {{ parent() }}
-{% endblock %}
-
-{% block smbloyer_body %}
 
 
-	<div class="block ajout_etudiant col-sm-6">
-		{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
-			<h5 class="titre">Nouvel étudiant </h5>
-			
-			{{ form_errors(form) }}
-			<div class="row">
-				<div class="col-sm-10">
-					{# personalisation du champ prenom #}
-					<div class="row">
-					<div class="form-group">
-						{{ form_label(form.prenom, "Prénom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-						{{ form_widget(form.prenom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-						{{ form_errors(form.prenom) }}
-					</div>
-					</div>
-					
-					{# personalisation du champ nom #}
-					<div class="row">
-					<div class="form-group">
-						{{ form_label(form.nom, "Nom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-						{{ form_widget(form.nom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-						{{ form_errors(form.nom) }}
-					</div>
-					</div>
+<div class="well block ajout_etudiant col-sm-6">
+    {{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}
 
-					{# personalisation du champ email #}
-					<div class="row">
-					<div class="form-group">
-						{{ form_label(form.email, "Adresse email: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-						{{ form_widget(form.email, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-						{{ form_errors(form.email) }}
-					</div>
-					</div>
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-sm-10">
+                {# personalisation du champ prenom #}
+                <div class="row">
+                <div class="form-group">
+                    {{ form_label(form.prenom, "Prénom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_widget(form.prenom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                    {{ form_errors(form.prenom) }}
+                    <div class="erreur erreur_prenom"></div>
+                </div>
+                </div>
 
-					{# personalisation du champ telephone #}
-					<div class="row">
-					<div class="form-group">
-						{{ form_label(form.telephone, "Téléphone: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-						{{ form_widget(form.telephone, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-						{{ form_errors(form.telephone) }}
-					</div>
-					</div>
+                {# personalisation du champ nom #}
+                <div class="row">
+                <div class="form-group">
+                    {{ form_label(form.nom, "Nom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_widget(form.nom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                    {{ form_errors(form.nom) }}
+                    <div class="erreur erreur_nom"></div>
+                </div>
+                </div>
 
-					{# personalisation du champ caution #}
-					<div class="row">
-					<div class="form-group">
-						{{ form_label(form.caution, "Caution payée: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
-						{{ form_widget(form.caution, {'atr': {'class': 'col-sm-6 form-control'}}) }}
-						{{ form_errors(form.caution) }}
-					</div>
-					</div>
+                {# personalisation du champ email #}
+                <div class="row">
+                <div class="form-group">
+                    {{ form_label(form.email, "Adresse email: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_widget(form.email, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                    {{ form_errors(form.email) }}
+                    <div class="erreur erreur_email"></div>
+                </div>
+                </div>
 
-				</div>
-				
+                {# personalisation du champ telephone #}
+                <div class="row">
+                <div class="form-group">
+                    {{ form_label(form.telephone, "Téléphone: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_widget(form.telephone, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                    {{ form_errors(form.telephone) }}
+                    <div class="erreur erreur_telephone"></div>
+                </div>
+                </div>
 
-			</div>
-			<div class="btn btn-dangr">
-				<li><a href="{{ path('smb_etudiant_home') }}">Annuler</a></li>
-			</div>
-			<div class="row">
-				{{ form_widget(form.enregistrer, {'atr': {'class': 'btn btn-default'}}) }}
-			</div>
+                {# personalisation du champ caution #}
+                {#<div class="row">
+                <div class="form-group">
+                    {{ form_label(form.caution, "Caution payée: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_widget(form.caution, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                    {{ form_errors(form.caution) }}
+                </div>
+                </div>#}
 
-		{{ form_end(form) }}
-	</div>
-{% endblock%}
+            </div>
+
+
+        </div>
+
+    {{ form_end(form) }}
+</div>

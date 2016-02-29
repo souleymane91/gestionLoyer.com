@@ -41,9 +41,9 @@ media="all" /> -->
               <li class="niveau1">
                 <span class="titre menu_gestion"><a href="{{ path('smb_etudiant_home') }}">Gestion</a></span>
                 <ul>
-                  <li class="niveau2 menu_etudiant"><a href="{{ path('smb_etudiant_home') }}">Etudiants</a></li>
-                  <li class="niveau2 menu_paiement"><a href="{{ path('smb_loyer_home') }}">Paiements</a></li>
-                  <li class="niveau2 menu_registre"><a href="{{ path('smb_registre_home') }}">Registres</a></li>
+                  <li class="niveau2 menu_etudiant"><a href="#" id="etudiant">Etudiants</a></li>
+                  <li class="niveau2 menu_paiement"><a href="#" id="paiement">Paiements</a></li>
+                  <li class="niveau2 menu_registre"><a href="#" id="registre">Registres</a></li>
                 </ul>
               </li>
               {% if(is_granted('ROLE_ADMIN')) %}

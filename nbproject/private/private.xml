@@ -5,10 +5,7 @@
         <group>
             <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Pavion/edit.html.twig</file>
             <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Pavion/index.html.twig</file>
-            <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Chambre/edit.html.twig</file>
-            <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Entity/Pavion.php</file>
-            <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Controller/ChambreController.php</file>
-            <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Chambre/add.html.twig</file>
+            <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Pavion/add.html.twig</file>
             <file>file:/C:/wamp/www/gestionLoyer/web/bundles/loyer/scss/_loyer.scss</file>
             <file>file:/C:/wamp/www/gestionLoyer/src/SMB/LoyerBundle/Resources/views/Loyer/parametre.html.twig</file>
         </group>

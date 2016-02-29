@@ -40,9 +40,9 @@ class LoyerController extends Controller{
 		//recupération du registre courant
 		$registre=new Registre();
 		$registre=$this->getDoctrine()
-						->getManager()
-						->getRepository("SMB\LoyerBundle\Entity\Registre")
-						->dernier_registre();
+                               ->getManager()
+                               ->getRepository("SMB\LoyerBundle\Entity\Registre")
+                               ->dernier_registre();
 
 		if($registre!=Null){
 

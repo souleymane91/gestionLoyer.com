@@ -45,7 +45,7 @@ class EtudiantRepository extends EntityRepository
         }
     }
     /*****************************************************************
-    * Recupérer l'ensemble des utilisateur qui ne sont pas supprimés
+    * Recupérer l'ensemble des étudiants qui ne sont pas supprimés
     *****************************************************************/
     public function listEtudiants(){
        //On recupère l'ensemble des étudiants
@@ -53,5 +53,20 @@ class EtudiantRepository extends EntityRepository
                 ->where('e.supprime = :bol')
                 ->setParameter('bol', FALSE);
        return $qb->getQuery()->getResult();
+    }
+    
+    /********************************************************
+     * vérifier si une adresse email existe ou pas
+     ******************************************************/
+    public function mailExiste($email){
+        $qb = $this->createQueryBuilder('e')
+                   ->where('e.email = :mail')
+                   ->setParameter('mail', $email);
+        if($qb->getQuery()->getResult()== NULL){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }

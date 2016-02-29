@@ -71,7 +71,7 @@ class Etudiant
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, unique = true)
      * @Assert\NotBlank(message="Veuillez saisir une adresse mail.")
      * @Assert\Email(message="Cet adresse email n'est pas valide.")
      */
@@ -235,6 +235,7 @@ class Etudiant
     {
         $this->codifications = new \Doctrine\Common\Collections\ArrayCollection();
         $this->caution = TRUE;
+        $this->supprime = false;//à la création l'étudiant n'est pas supprimé
     }
 
     /**
@@ -305,4 +306,15 @@ class Etudiant
                             ->listEtudiants();
         return $listEtudiants;
     }
+    
+    /************************************************
+     * fonction qui vérifie si un mail existe ou pas
+     ************************************************/
+    public function mailExiste(\SMB\LoyerBundle\Controller\EtudiantController $cont){
+        $existe = $cont->getDoctrine()
+                       ->getManager()
+                       ->getRepository("SMBLoyerBundle:Etudiant")
+                       ->mailExiste($this->email);
+        return($existe);
+    } 
 }

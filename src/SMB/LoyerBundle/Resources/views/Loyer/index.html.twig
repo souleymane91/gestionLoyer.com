@@ -7,5 +7,39 @@
 {% endblock %}
 
 {% block smbloyer_body %}
+    <div id="contenuApp">
 	<h1>Page d'accueil en construction </h1>
+    </div>
+        
+{# tout le code javascript est ici #}
+<script>
+    $(document).ready(function(){
+       /******************************************
+        * gestion du click sur le menu etudiant
+        ******************************************/
+        $('#etudiant').click(function(){
+            //on charge l'image loader
+            $('#loader').show();
+          
+            var DATA = "";
+          
+            $.ajax({
+                type:"POST",
+                url: "{{ path("smb_etudiant_home") }}",
+                data: DATA,
+                success: function(data){
+                    //on cache l'image loader
+                    $('#loader').hide();
+                    
+                    //on remplie le contenu par le résultat
+                    $('#contenuApp').html(data);
+                },
+                error: function(){
+                    //on cache l'image loader
+                    $('#loader').hide();
+                }
+          });
+       });
+    });
+</script>
 {% endblock %}

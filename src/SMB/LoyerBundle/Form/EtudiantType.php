@@ -18,9 +18,7 @@ class EtudiantType extends AbstractType
             ->add('prenom', 'text')
             ->add('nom', 'text')
             ->add('email', 'email')
-            ->add('telephone', 'number')
-            ->add('caution', 'checkbox')
-            ->add('enregistrer', 'submit')           
+            ->add('telephone', 'number')        
         ;
     }
     

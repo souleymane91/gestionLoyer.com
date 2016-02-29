@@ -134,27 +134,52 @@ class EtudiantController extends Controller{
 	public function addAction(Request $request){
 
 		//Création de l'objet Etudiant
-		$etudiant= new Etudiant();
+            $etudiant= new Etudiant();
+            if($request->isXmlHttpRequest()){
+                //on recupère le type de la requete
+                $requete = $request->request->get('requete');
+                if($requete == "affichage"){//on veut afficher le formulaire d'ajout
+                    //Création du formulaire
+                    $form=$this->get('form.factory')->create(new EtudiantType(), $etudiant);  
 
-		//Création du formulaire
-		$form=$this->get('form.factory')->create(new EtudiantType(), $etudiant);
-
-		$form->handleRequest($request);
-                if($request->getMethod()=="POST"){
-                    print_r($errors);
-                    //on enregistre les données tapées par le visiteur en testant si elles sont valides
-                    if($form->isValid()){
-                            $em=$this->getDoctrine()->getManager();
-                            $em->persist($etudiant);
-                            $em->flush();
-
-                            return $this->redirect($this->generateUrl("smb_etudiant_view",array('id'=>$etudiant->getId())));
-                    }   
+                    return $this->render("SMBLoyerBundle:Etudiant:add.html.twig",array(
+                        'form' => $form->createView()
+                    ));                        
                 }
-                
-		return $this->render("SMBLoyerBundle:Etudiant:add.html.twig",
-			array('form' => $form->createView()
-		));
+                else{
+                    if($requete == "ajout"){//on veut enregistrer les données dans la base
+                        //on recupère les information envoyées par la requete
+                        $etudiant->setPrenom($request->request->get('prenom'));
+                        $etudiant->setNom($request->request->get('nom'));
+                        $etudiant->setEmail($request->request->get('email'));
+                        $etudiant->setTelephone($request->request->get('telephone'));
+
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $errors = array();
+                        //vérifions si les données peuvent être enregistrées
+                        if($etudiant->mailExiste($this)){//le mail saisi existe déjà
+                            $errors['email'] = "Cette adresse mail existe déjà!";
+                        }
+                        else{
+                            $errors['email'] = "";
+                            //on enregistre l'etudiant dans la base de données 
+                            $em->persist($etudiant);
+                            $em->flush();                                
+                        }
+                        //on envoie la liste de tous les étudiants
+                        $listEtudiants = Etudiant::listEtudiants($this);
+                        return $this->render("SMBLoyerBundle:Etudiant:index.html.twig",array(
+                            'listEtudiants' => $listEtudiants,
+                            'errors' => $errors
+                        ));                                
+
+                    }
+                }
+            }
+            else{
+                throw new \Exception("Erreur! pas de requete.");
+            }
 	}
 
 
@@ -165,38 +190,82 @@ class EtudiantController extends Controller{
 	* @Security("has_role('ROLE_GESTIONNAIRE')")
 	*/
 	public function editAction($id, Request $request){
+            
+            //Création de l'objet Etudiant
+            $etudiant= new Etudiant();
+            if($request->isXmlHttpRequest()){
+                //on recupère le type de la requete
+                $requete = $request->request->get('requete');
+                if($requete == "affichage"){//on veut afficher le formulaire d'ajout
+                    //on recupère l'étudiant à modifier
+                    $etudiant = $this->getDoctrine()
+                                     ->getManager()
+                                     ->getRepository("SMBLoyerBundle:Etudiant")
+                                     ->find($request->request->get('id_etudiant'));
+                    //Création du formulaire
+                    $form=$this->get('form.factory')->create(new EtudiantType(), $etudiant);  
 
-		$etudiant= new Etudiant();
-		$etudiant=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Etudiant")->find($id);
+                    return $this->render("SMBLoyerBundle:Etudiant:edit.html.twig",array(
+                        'form' => $form->createView()
+                    ));                        
+                }
+                else{
+                    if($requete == "ajout"){//on veut enregistrer les données dans la base
+                        //on recupère les information envoyées par la requete
+                        $etudiant->setPrenom($request->request->get('prenom'));
+                        $etudiant->setNom($request->request->get('nom'));
+                        $etudiant->setEmail($request->request->get('email'));
+                        $etudiant->setTelephone($request->request->get('telephone'));
 
-		$form= $this->get('form.factory')->create(new EtudiantType(), $etudiant);
-		$form->handleRequest($request);
-		if($form->isValid()){
-			$em=$this->getDoctrine()->getManager();
-			$em->flush();
+                        $em = $this->getDoctrine()
+                                   ->getManager();
+                        $errors = array();
+                        //vérifions si les données peuvent être enregistrées
+                        if($etudiant->mailExiste($this)){//le mail saisi existe déjà
+                            $errors['email'] = "Cette adresse mail existe déjà!";
+                        }
+                        else{
+                            $errors['email'] = "";
+                            //on enregistre l'etudiant dans la base de données 
+                            $em->persist($etudiant);
+                            $em->flush();                                
+                        }
+                        //on envoie la liste de tous les étudiants
+                        $listEtudiants = Etudiant::listEtudiants($this);
+                        return $this->render("SMBLoyerBundle:Etudiant:index.html.twig",array(
+                            'listEtudiants' => $listEtudiants,
+                            'errors' => $errors
+                        ));                                
 
-			return $this->redirect($this->generateUrl("smb_etudiant_view",
-				array('id'=>$etudiant->getId())
-			));
-		}
-
-		return $this->render("SMBLoyerBundle:Etudiant:edit.html.twig", 
-			array('form' => $form->createView()
-		));
+                    }
+                }
+            }
+            else{
+                throw new \Exception("Erreur! pas de requete.");
+            }
 	}
 
 	/***************************************************************
 	* l'action deleteEtudiantAction pour supprimer un étudiant
 	***************************************************************/
-	public function deleteAction($id){
+	public function deleteAction($id, Request $request){
 
-            $this->getDoctrine()
-                 ->getManager()
-                 ->getRepository("SMBLoyerBundle:Etudiant")
-                 ->supprimer_etudiant($id);
+            if($request->isXmlHttpRequest()){
+                //on supprime l'étudiant
+                $this->getDoctrine()
+                     ->getManager()
+                     ->getRepository("SMBLoyerBundle:Etudiant")
+                     ->supprimer_etudiant($request->request->get('id_etudiant'));
 
-            //on affiche la liste des utilisateurs
-            return $this->redirect($this->generateUrl('smb_etudiant_home'));
+                //on affiche la liste des utilisateurs
+                $listEtudiants = Etudiant::listEtudiants($this);
+                return $this->render("SMBLoyerBundle:Etudiant:index.html.twig",array(
+                    'listEtudiants' => $listEtudiants
+                ));                
+            }
+            else{
+                throw new \Exception("Erreur: aucune requête ajax!");
+            }
 	}
 
         
