@@ -188,4 +188,14 @@ class Pavion
                        ->restaurer($this->libelle);
         return $existe;
     }
+    
+    /***********************************************************
+     * fonction qui permet de recuperer le pavion correspondant
+     * à un nom de pavion donné
+     ***********************************************************/
+    public static function getPavion($em, $id){
+        $pavion = $em->getRepository("SMBLoyerBundle:Pavion")
+                     ->find($id);
+        return $pavion;
+    }
 }

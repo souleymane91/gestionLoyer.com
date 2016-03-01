@@ -1,116 +1,159 @@
 {# src\SMB\LoyerBundle\Resources\Views\Loyer\view.html.twig #}
 
-{% extends "SMBLoyerBundle::layout.html.twig" %}
-
-{% block title %}
-	Informations de l'étudiant - {{ parent() }}
-{% endblock %}
-
-{% block sidebar %}	
-	<div class="row">
-		{% if codifier==true %}
-			<div>
-				<a href="{{ path('smb_loyer_paiement',{'id':etudiant.id}) }}">Effectuer un paiement</a>
-			</div>
-			<div>
-				<a href="{{ path('smb_loyer_paiement',{'id':etudiant.id}) }}">Modifier les paiements</a>
-			</div>
-		{% endif %}
-		<div>
-			<a href="{{ path('smb_etudiant_edit',{'id':etudiant.id}) }}">Modifier les informations de l'étudiant</a>
-		</div>
-		<div >
-			<a href="{{ path('smb_etudiant_home') }}">Retour à la liste</a>
-		</div>
-	</div>
-{% endblock %}
-
-{% block smbloyer_body %}
-		<div class="col-sm-6">
-			<div class="block info_etudiant">
-
-				<div class="w">
-					<div class="titre_block">
-						<h5 class="titre"> Informations de l'étudiant</h5>
-					</div>
-					<table>
-						<tr>
-							<td class="libelle">Prénom</td> <td>{{ etudiant.prenom }}</td>
-						</tr>
-						<tr>
-							<td class="libelle">Nom</td><td>{{ etudiant.nom }}</td>
-						</tr>
-						<tr>
-							<td class="libelle">Adresse email</td><td>{{ etudiant.email }}</td>
-						</tr>
-						<tr>
-							<td class="libelle">Téléphone</td><td>{{ etudiant.telephone }}</td>
-						</tr>
-						{% if codifier==false %}
-							<a href="{{ path('smb_etudiant_codification',{'id':etudiant.id}) }}">Codifier maintenant</a>
-						{% else %}
-							<tr>
-								<td class="libelle">Chambre</td><td>{{ codification.chambre.numero }}{{ codification.pavion.libelle }}</td>
-							</tr>
-						{% endif %}
-					</table>
-					
-				</div>
-			</div>
-		</div>
-
-		<div class="col-sm-1">
-		</div>
-
-		{% if codifier==true %}
-			<div class="col-sm-6">
-				<div class="block paiement_etudiant">
-
-					<div class="wel">
-						<div class="titre_block">
-							<h5 class="titre">Etat Paiement</h5>
-						</div>
-						<ul class="list-group">
-							{% if listMoisPaye is not null %}
-								<div class="row">
-									<div class="col-sm-6">
-										{% set nbre=1 %}
-										<div class="part1">
-											{% for mois in listmois %}
-												{% if nbre<=6 %}
-													{% if(mois in listMoisPaye) %}
-														<li class="list-group-item paye">{{ mois.libelle }}</li>
-													{% else %}
-														<li class="nonpaye">{{ mois.libelle }}</li>
-													{% endif %}
-												{% endif %}
-												{% set nbre=nbre+1 %}
-											{% endfor %}
-										</div>											
-
-										{% set nbre=1 %}
-										<div class="part2">
-											{% for mois in listmois %}
-												{% if nbre>6 %}
-													{% if(mois in listMoisPaye) %}
-														<li class="list-group-item paye">{{ mois.libelle }}</li>
-													{% else %}
-														<li class="nonpaye">{{ mois.libelle }}</li>
-													{% endif %}
-												{% endif %}
-												{% set nbre=nbre+1 %}
-											{% endfor %}										
-										</div>
-									</div>
-								</div>
-							{% endif %}
-						</ul>
-						{% if listMoisPaye is null %}
-							<h3>Aucun paiement effectué</h3>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		{% endif %}
 	
-{% endblock %}
+<div class="block affichage_etudiant col-sm-6">
+    <div class='operation_etudiant'>
+        <ul>
+            <li class="retour"><button>Retour</button></li>
+            <li class="modifier1"><button>Modifier</button></li>
+            <li class="supprimer1"><button>Supprimer</button></li>
+            {% if codifier==true %}
+                <li class="payer"><button>Effectuer un paiement</button></li>
+                <li class="modifierCod"><button>Modifier la codification</button></li>
+                <li class="annuler"><button>Annuler la codification</button></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="well block info_etudiant">
+        <div class="titre_block">
+                <h5 class="titre"> Informations de l'étudiant</h5>
+        </div>
+        <table>
+            <tr>
+                <td class="libelle">Prénom</td> <td>{{ etudiant.prenom }}</td>
+            </tr>
+            <tr>
+                <td class="libelle">Nom</td><td>{{ etudiant.nom }}</td>
+            </tr>
+            <tr>
+                <td class="libelle">Adresse email</td><td>{{ etudiant.email }}</td>
+            </tr>
+            <tr>
+                <td class="libelle">Téléphone</td><td>{{ etudiant.telephone }}</td>
+            </tr>
+            {% if codifier==true %}
+                <tr>
+                    <td class="libelle">Chambre</td><td>{{ codification.chambre.numero }}{{ codification.pavion.libelle }}</td>
+                </tr>
+            {% endif %}
+        </table>
+        {% if codifier==false %}
+            <button class="codifier">Codifier</button>
+        {% endif %}
+    </div>
+    <div class="block paiement_etudiant">
+        {% if codifier==true %}
+            <div class="wel">
+                <div class="titre_block">
+                        <h5 class="titre">Etat Paiement</h5>
+                </div>
+                {% for paiement in listPaiements %} 
+                    <table class="table table-striped table-borded table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Mois</th><th>Date paiement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for mois in paiement.mois %}
+                                    <td>mois.libelle</td><td>paiement.datePaiement</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div id="dialogue_codification" title="Codification">
+</div>
+    
+{# tout le code jquery sera ici#}
+<script>
+    $(document).ready(function(){
+       /**************************************
+        * si on click sur le bouton codifier
+        **************************************/
+       $('.codifier').click(function(){
+           //on affiche l'image loader
+           $('#loader').show();
+           
+           var requete = "affichage";
+           var DATA = "";
+           
+           DATA = "requete="+requete;
+           $.ajax({
+              type:"POST",
+              url:"{{ path('smb_codification_add') }}",
+              data:DATA,
+              success: function(data){
+                  //on enlève l'image loader
+                  $('#loader').hide();
+                  
+                  //on affiche le formulaire sur une boite de dialogue
+                  $('#dialogue_codification').html(data);
+                  $('#dialogue_codification').dialog({
+                      modal:true,
+                      buttons: {
+                          "Annuler": function(){
+                              //on enlève la boite de dialogue et on ne fait rien
+                              $(this).dialog("close");
+                          },
+                          "Enregistrer": function(){
+                              //on enlève la boite de dialogue puis ajouter la codification
+                              $(this).dialog("close");
+                              ajouterCodification();
+                          }
+                      }
+                  });
+              },
+              error: function(){
+                  //on enlève l'image loader
+                  $('#loader').hide();
+              }
+           });
+           
+       });
+    });
+    
+    
+    /**************************************
+    * fonction qui permet d'enregistrer la 
+    * codification dans la base de données
+     ***************************************/
+    function ajouterCodification(){
+        //on charge l'image loader
+        $('#loader').show();
+        
+        var requete = "ajout";
+        var DATA;
+        var numero;
+        var pavion;
+        var id_etudiant;
+        
+        numero = $('#smb_loyerbundle_codification_chambre').val();//le numero de chambre choisi
+        pavion = $('#smb_loyerbundle_codification_pavion').val();//le pavion choisi
+        id_etudiant = {{ etudiant.id }};
+        
+        DATA = "requete="+requete+"&numero="+numero+"&pavion="+pavion+"&id_etudiant="+id_etudiant;
+        
+        $.ajax({
+            type:"POST",
+            url:"{{ path('smb_codification_add') }}",
+            data:DATA,
+            success: function(data){
+                //on enlève l'image loader
+                $('#loader').hide();
+                
+                //on réaffiche les informations de l'étudiant
+                $('#contenuApp').html(data);
+            },
+            error: function(){
+                //on enlève l'image loader
+                $('#loader').hide();
+            }
+        });
+    }
+</script>

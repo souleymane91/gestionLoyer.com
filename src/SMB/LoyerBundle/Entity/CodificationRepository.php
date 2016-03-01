@@ -13,18 +13,22 @@ use SMB\LoyerBundle\Entity\Registre;
  */
 class CodificationRepository extends EntityRepository
 {
-	public function codification_etudiant($etudiant,$registre){
+    /*******************************************************
+     * fonction qui permet de recupérer la codification d'un
+     * etudiant pour un registre donné
+     *******************************************************/
+    public function codification($etudiant,$registre){
 
-		$qb=$this->createQuerybuilder('c');
-		$qb->join('c.etudiant','e')
-			->addSelect('e')
-			->where('e.id =:etu')
-			->setParameter('etu',$etudiant->getId())
-			->join('c.registre','r')
-			->addSelect('r')
-			->andWhere('r.id =:reg')
-			->setParameter('reg',$registre->getId());
-			
-		return $qb->getQuery()->getOneOrNullResult();
-	}
+            $qb=$this->createQuerybuilder('c');
+            $qb->join('c.etudiant','e')
+                    ->addSelect('e')
+                    ->where('e.id =:etu')
+                    ->setParameter('etu',$etudiant->getId())
+                    ->join('c.registre','r')
+                    ->addSelect('r')
+                    ->andWhere('r.id =:reg')
+                    ->setParameter('reg',$registre->getId());
+
+            return $qb->getQuery()->getOneOrNullResult();
+    }
 }

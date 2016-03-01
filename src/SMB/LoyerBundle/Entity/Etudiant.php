@@ -307,9 +307,30 @@ class Etudiant
         return $listEtudiants;
     }
     
-    /************************************************
+    /***************************************************
+     * fonction qui per permet de recupérer un etudiant
+     * à partir d'un id
+     ***************************************************/
+    public static function getEtudiant($em, $id){
+        $etudiant = $em->getRepository("SMBLoyerBundle:Etudiant")
+                       ->find($id);
+        return $etudiant;
+    }
+    
+    /******************************************************
+     * foncton qui permet de recupérer la codification d'un
+     * etudiant pour un registre donné
+     ******************************************************/
+    public function codification($em, $registre){
+        $codification = $em->getRepository("SMBLoyerBundle:Codification")
+                           ->codification($this,$registre);
+        return $codification;
+    }
+    
+    /*****************************************************
      * fonction qui vérifie si un mail existe ou pas
-     ************************************************/
+     * renvoie true si le mail existe déja et false sinon
+     *****************************************************/
     public function mailExiste(\SMB\LoyerBundle\Controller\EtudiantController $cont){
         $existe = $cont->getDoctrine()
                        ->getManager()

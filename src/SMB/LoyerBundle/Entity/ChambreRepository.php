@@ -89,4 +89,15 @@ class ChambreRepository extends EntityRepository
             return true;
         }
     }
+    
+    /**************************************************
+     * fonction qui permet de recuperer la chambre
+     * qui a un numero donné
+     **************************************************/
+    public function chambre($numero){
+        $qb = $this->createQueryBuilder('c')
+                   ->where('c.numero = :num')
+                   ->setParameter('num',$numero);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

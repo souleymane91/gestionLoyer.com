@@ -1,0 +1,22 @@
+#****************************************
+#Définition des routes pour Codification
+#****************************************
+smb_codification_home:
+    path: /codification/index/
+    defaults: { _controller: SMBLoyerBundle:Codification:index }
+
+smb_codification_add:
+    path: /codification/add/
+    defaults: { _controller: SMBLoyerBundle:Codification:add }
+        
+smb_codification_edit:
+    path: /codification/edit/{id}/
+    defaults: { _controller: SMBLoyerBundle:Codification:edit }
+    requirements:
+        id: \d+
+ 
+smb_codification_delete:
+    path: /codification/delete/{id}/
+    defaults: { _controller: SMBLoyerBundle:Codification:delete }
+    requirements:
+        id: \d+

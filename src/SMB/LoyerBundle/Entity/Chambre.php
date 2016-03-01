@@ -189,4 +189,14 @@ class Chambre
                        ->restaurer($this->numero);
         return $existe;
     }
+    
+    /***********************************************************
+     * fonction qui permet de recuperer la chambre correspondant
+     * à un numero de chambre donné
+     ***********************************************************/
+    public static function getChambre($em, $numero){
+        $chambre = $em->getRepository("SMBLoyerBundle:Chambre")
+                      ->find($numero);
+        return $chambre;
+    }
 }

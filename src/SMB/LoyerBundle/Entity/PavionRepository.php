@@ -88,4 +88,15 @@ class PavionRepository extends EntityRepository
             return true;
         }
     }
+    
+    /**************************************************
+     * fonction qui permet de recuperer le pavion
+     * qui a un nom donné
+     **************************************************/
+    public function pavion($nom){
+        $qb = $this->createQueryBuilder('p')
+                   ->where('p.libelle = :nom')
+                   ->setParameter('nom',$nom);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

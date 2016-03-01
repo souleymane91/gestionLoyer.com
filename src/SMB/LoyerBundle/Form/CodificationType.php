@@ -25,7 +25,6 @@ class CodificationType extends AbstractType
                 'property'=>'libelle',
                 'multiple'=>false
             ))
-            ->add('enregistrer', 'submit')
         ;
     }
     

@@ -337,4 +337,14 @@ class Registre
                             ->listRegistres();
         return $listRegistres;
     }
+    
+    /****************************************************
+     * fonction qui permet de recupèrer un registre
+     * à partir d'un id
+     ****************************************************/
+    public static function getRegistre($em, $id){
+        $registre = $em->getRepository("SMBLoyerBundle:Registre")
+                       ->find($id);
+        return $registre;
+    }
 }

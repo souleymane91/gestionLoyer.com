@@ -7,7 +7,7 @@ smb_etudiant_home:
     defaults: { _controller: SMBLoyerBundle:Etudiant:index }
 
 smb_etudiant_view:
-    path: /etudiant/{id}/
+    path: /etudiant/view/{id}/
     defaults: { _controller: SMBLoyerBundle:Etudiant:view }
     requirements:
         id: \d+

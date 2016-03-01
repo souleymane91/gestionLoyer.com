@@ -11,7 +11,7 @@
                 {# personalisation du champ prenom #}
                 <div class="row">
                 <div class="form-group">
-                    {{ form_label(form.prenom, "Prénom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_label(form.prenom, "Prénom ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
                     {{ form_widget(form.prenom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
                     {{ form_errors(form.prenom) }}
                     <div class="erreur erreur_prenom"></div>
@@ -21,7 +21,7 @@
                 {# personalisation du champ nom #}
                 <div class="row">
                 <div class="form-group">
-                    {{ form_label(form.nom, "Nom: ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_label(form.nom, "Nom ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
                     {{ form_widget(form.nom, {'atr': {'class': 'col-sm-6 form-control'}}) }}
                     {{ form_errors(form.nom) }}
                     <div class="erreur erreur_nom"></div>
@@ -31,7 +31,7 @@
                 {# personalisation du champ email #}
                 <div class="row">
                 <div class="form-group">
-                    {{ form_label(form.email, "Adresse email: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_label(form.email, "Adresse email " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
                     {{ form_widget(form.email, {'atr': {'class': 'col-sm-6 form-control'}}) }}
                     {{ form_errors(form.email) }}
                     <div class="erreur erreur_email"></div>
@@ -41,7 +41,7 @@
                 {# personalisation du champ telephone #}
                 <div class="row">
                 <div class="form-group">
-                    {{ form_label(form.telephone, "Téléphone: " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                    {{ form_label(form.telephone, "Téléphone " , {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
                     {{ form_widget(form.telephone, {'atr': {'class': 'col-sm-6 form-control'}}) }}
                     {{ form_errors(form.telephone) }}
                     <div class="erreur erreur_telephone"></div>

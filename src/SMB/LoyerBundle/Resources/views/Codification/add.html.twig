@@ -1,0 +1,43 @@
+{# src\SMB\LoyerBundle\Resources\views\Codification\add.html.twig #}
+
+<div class="codification_ajout" title="Nouveau numéro">
+<div class="block ajouter_codification col-sm-6">
+        {#{{ form_start(form, {'atr': {'class': 'form-horizontal'}}) }}#}
+        <form id="formulaire_ajout">
+                {#<div class="titre_block">
+                    <h5 class="titre">Nouveau numéro </h5>
+                </div>#}
+
+                {{ form_errors(form) }}
+                <div class="row">
+                        <div class="col-sm-10">
+                                {# personalisation du champ chambre #}
+                                <div class="row">
+                                <div class="form-group">
+                                        {{ form_label(form.chambre, "Numéro de chambre ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_widget(form.chambre, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                                        <span class="chambre_erreur"></span>
+                                        
+                                </div>
+                                </div>
+                                        
+                                {# personalisation du champ pavion #}
+                                <div class="row">
+                                <div class="form-group">
+                                        {{ form_label(form.pavion, "Pavion ", {'label_atr': {'class': 'col-sm-3 control-label'}}) }}
+                                        {{ form_widget(form.pavion, {'atr': {'class': 'col-sm-6 form-control'}}) }}
+                                        <span class="pavion_erreur"></span>
+                                        
+                                </div>
+                                </div>
+
+                        </div>
+
+
+                </div>
+
+      {#  {{ form_end(form) }}#}
+        </form>
+</div>
+</div>
+        

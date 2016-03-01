@@ -47,81 +47,52 @@ class EtudiantController extends Controller{
 	*/
 	public function viewAction($id, Request $request){
 
-		$etudiant= new Etudiant();
-		$etudiant=$this->getDoctrine()->getManager()->getRepository("SMBLoyerBundle:Etudiant")->find($id);
+            if($request->isXmlHttpRequest()){
+                $etudiant= new Etudiant();
 
-		//on recupère le registre courant
-		$session=$request->getSession();
-		$id_registre=$session->get('id_registre_courant');
-		$registre=$this->getDoctrine()
-						->getManager()
-						->getRepository("SMBLoyerBundle:Registre")
-						->dernier_registre();
-		//Trouvons la codification correspondante au registre actuel
-		$codification=$this->getDoctrine()
-							->getManager()
-							->getRepository("SMBLoyerBundle:Codification")
-							->codification_etudiant($etudiant,$registre);
+                //on recupère un entity manager
+                $em = $this->getDoctrine()->getManager();
 
-		//liste des paiement correspondant à cette codification
-		if(!is_null($codification)){
-			$codifier=true;
-			$listPaiements=$this->getDoctrine()
-								->getManager()
-								->getRepository("SMBLoyerBundle:Paiement")
-								->paiements($codification);	
+                //on recupère l'étudiant correspondant à $id
+                $ident = $request->request->get('id_etudiant');
+                $etudiant=Etudiant::getEtudiant($em,$ident);
+                if($etudiant == null){
+                    throw new \Exception("Il n'existe pas d'étudiant correspondant à l'id ".$ident);
+                }
 
-			//Trouver la liste composée par les mois correspondant à chaque paiement
-			$listMoisPaye=array();
-			if(!is_null($listPaiements)){
-				foreach ($listPaiements as $paiement) {		
-					$listMois=$this->getDoctrine()
-										->getManager()
-										->getRepository("SMBLoyerBundle:Mois")
-										->mois_paye($paiement);
-					foreach ($listMois as $mois) {
-						$listMoisPaye[]=$mois;
-					}
-				}		
-				//liste des mois non payés
-				$nonPaye=array();
-				$tableauMois=array();
-				$mois=$this->getDoctrine()
-				 		   ->getManager()
-				 		   ->getRepository("SMBLoyerBundle:Mois")
-				 		   ->findAll();
-				foreach ($listMoisPaye as $m) {
-					$tableauMois[]=$m->getLibelle();
-				}
-				foreach ($mois as $value) {
-					if(!in_array($value->getLibelle(), $tableauMois)){
-						$nonPaye[]=$value;
-					}					
-				}
+                //on recupère le registre courant
+                $session=$request->getSession();
+                $id_registre=$session->get('id_registre_courant');
+                $registre=Registre::getRegistre($em,$id_registre);
+                if($registre == null){
+                    throw new \Exception("Il n'existe pas de registre correspondant à l'id ".$id_registre);
+                }
 
-				//on recupère la liste de tous les mois
-				$listmois=$this->getDoctrine()
-							   ->getManager()
-							   ->getRepository("SMBLoyerBundle:Mois")
-							   ->findAll();
+                //Trouvons la codification correspondante au registre actuel
+                $codification=$etudiant->codification($em, $registre);
 
-				return $this->render("SMBLoyerBundle:Etudiant:view.html.twig", 
-					array('etudiant' => $etudiant,
-						  'codification' => $codification,
-						  'listMoisPaye' => $listMoisPaye,
-						  'codifier' => $codifier,
-						  'nonPaye' => $nonPaye,
-						  'listmois' => $listmois
-				));
-			}
-		}
-
-		$codifier=false;
-		return $this->render("SMBLoyerBundle:Etudiant:view.html.twig", 
-					array('etudiant' => $etudiant,
-						  'codifier' => $codifier
-				));
-
+                //liste des paiement correspondant à cette codification
+                if(!is_null($codification)){
+                        $codifier=true;
+                        $listPaiements=$codification->getPaiements();
+                        return $this->render("SMBLoyerBundle:Etudiant:view.html.twig",array(
+                            'etudiant' => $etudiant,
+                            'codifier' => $codifier,
+                            'codification' => $codification,
+                            'listPaiements' => $listPaiements
+                        ));
+                }
+                else{
+                    $codifier=false;                    
+                    return $this->render("SMBLoyerBundle:Etudiant:view.html.twig",array(
+                        'etudiant' => $etudiant,
+                        'codifier' => $codifier
+                    ));
+                }                    
+            }
+            else{
+                throw new \Exception("Erreur: aucune requête envoyée!");
+            }
 	}
 
 

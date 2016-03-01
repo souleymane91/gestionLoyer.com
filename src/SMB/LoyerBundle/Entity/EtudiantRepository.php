@@ -68,5 +68,5 @@ class EtudiantRepository extends EntityRepository
         else{
             return true;
         }
-    }
+    }    
 }
